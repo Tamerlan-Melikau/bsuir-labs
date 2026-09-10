@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <variant>
+#include <vector>
 
 class Multiset;
 
@@ -19,14 +20,12 @@ public:
     void fromString(const std::string& str);
 
     Multiset(const Multiset& other);
-
     Multiset& operator=(const Multiset& other);
-
     ~Multiset();
 
     bool operator==(const Multiset& other) const;
-
     bool operator!=(const Multiset& other) const;
+    bool operator<(const Multiset& other) const;
 
     friend std::istream& operator>>(std::istream& is, Multiset& m);
     friend std::ostream& operator<<(std::ostream& os, const Multiset& m);
@@ -40,7 +39,11 @@ public:
     void remove(const Multiset& element);
 
     int uniqueElementsCount() const;
+    int size() const;
+    int count(const std::string& element) const;
+    int count(const Multiset& element) const;
+    bool contains(const std::string& element) const;
+    bool contains(const Multiset& element) const;
 
     std::string check() const;
-
 };
