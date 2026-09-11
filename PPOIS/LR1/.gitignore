@@ -1,0 +1,13 @@
+*.exe
+*.o
+*.obj
+
+*.gcov
+*.gcda
+*.gcno
+
+html/
+latex/
+Doxyfile.bak
+
+.vscode/

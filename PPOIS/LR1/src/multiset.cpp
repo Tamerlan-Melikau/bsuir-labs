@@ -105,7 +105,7 @@ std::istream& operator>>(std::istream& is, Multiset& m){
 
 std::ostream& operator<<(std::ostream& os, const Multiset& m){
     os << "{ ";
-    for (const auto& [element, count] : m.data) {
+    for (const auto& [element, count] : m.data){
         if (std::holds_alternative<std::string>(element)){
             os << std::get<std::string>(element);
         } else if (std::holds_alternative<Multiset>(element)){
@@ -134,8 +134,8 @@ void Multiset::remove(const std::string& element){
 
 void Multiset::remove(const std::string& element, int count){
     auto it = data.find(element);
-    if (it != data.end()) {
-        if (it->second > count) {
+    if (it != data.end()){
+        if (it->second > count){
             it->second -= count;
         } else {
             data.erase(it);
@@ -158,7 +158,7 @@ int Multiset::uniqueElementsCount() const{
     return data.size();
 }
 
-int Multiset::size() const {
+int Multiset::size() const{
     int total = 0;
     for (const auto& [element, cnt] : data){
         total += cnt;
@@ -168,13 +168,13 @@ int Multiset::size() const {
 
 int Multiset::count(const std::string& element) const{
     auto it = data.find(element);
-    if (it != data.end()) {
+    if (it != data.end()){
         return it->second;
     }
     return 0;
 }
 
-int Multiset::count(const Multiset& element) const {
+int Multiset::count(const Multiset& element) const{
     auto it = data.find(element);
     if (it != data.end()) {
         return it->second;
@@ -182,20 +182,20 @@ int Multiset::count(const Multiset& element) const {
     return 0;
 }
 
-bool Multiset::contains(const std::string& element) const {
+bool Multiset::contains(const std::string& element) const{
     return data.find(element) != data.end();
 }
 
-bool Multiset::contains(const Multiset& element) const {
+bool Multiset::contains(const Multiset& element) const{
     return data.find(element) != data.end();
 }
 
-std::string Multiset::check() const {
+std::string Multiset::check() const{
     std::string res = "{";
-    for (const auto& [element, count] : data) {
-        if (std::holds_alternative<std::string>(element)) {
+    for (const auto& [element, count] : data){
+        if (std::holds_alternative<std::string>(element)){
             res += std::get<std::string>(element);
-        } else if (std::holds_alternative<Multiset>(element)) {
+        } else if (std::holds_alternative<Multiset>(element)){
             res += std::get<Multiset>(element).check();
         }
         res += ":" + std::to_string(count) + ", ";
