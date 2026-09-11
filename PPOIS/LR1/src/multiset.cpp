@@ -3,51 +3,112 @@
 Multiset::Multiset() {
 }
 
-Multiset::Multiset(const std::string& str) {
+Multiset::Multiset(const std::string& str){
     fromString(str);
 }
 
-Multiset::Multiset(const Multiset& other) : data(other.data) {
+Multiset::Multiset(const Multiset& other) : data(other.data){
 }
 
-Multiset& Multiset::operator=(const Multiset& other) {
+Multiset& Multiset::operator=(const Multiset& other){
     if (this != &other) {
         data = other.data;
     }
     return *this;
 }
 
-Multiset::~Multiset() {
+Multiset::~Multiset(){
 }
 
-bool Multiset::operator==(const Multiset& other) const {
+void Multiset::fromString(const std::string& str){
+    if (str.size() < 2) return;
+    if (str.front() != '{' || str.back() != '}') return;
+
+    std::string content = str.substr(1, str.size() - 2);
+    if (content.empty()) return;
+
+    std::vector<std::string> elements;
+    std::string current;
+    int depth = 0;
+
+    for (char c : content){
+        if (c == '{'){
+            depth++;
+            current += c;
+        } else if (c == '}'){
+            depth--;
+            current += c;
+        } else if (c == ',' && depth == 0){
+            elements.push_back(current);
+            current.clear();
+        } else{
+            current += c;
+        }
+    }
+
+    if (!current.empty()){
+        elements.push_back(current);
+    }
+
+    for (std::string& elem : elements){
+        while (!elem.empty() && elem.front() == ' '){
+            elem.erase(0, 1);
+        }
+        while (!elem.empty() && elem.back() == ' '){
+            elem.pop_back();
+        }
+
+        if (elem.empty()) continue;
+
+        if (elem.front() == '{'){
+            Multiset inner(elem);
+            add(inner);
+        } else{
+            add(elem);
+        }
+    }
+}
+
+bool Multiset::operator==(const Multiset& other) const{
     return data == other.data;
 }
 
-bool Multiset::operator!=(const Multiset& other) const {
+bool Multiset::operator!=(const Multiset& other) const{
     return !(*this == other);
 }
 
-bool Multiset::operator<(const Multiset& other) const {
+bool Multiset::operator<(const Multiset& other) const{
     return data < other.data;
 }
 
-std::istream& operator>>(std::istream& is, Multiset& m) {
+bool Multiset::operator>(const Multiset& other) const{
+    return other < *this;
+}
+
+bool Multiset::operator<=(const Multiset& other) const{
+    return !(other < *this);
+}
+
+bool Multiset::operator>=(const Multiset& other) const{
+    return !(*this < other);
+}
+
+std::istream& operator>>(std::istream& is, Multiset& m){
     std::string key;
     int value;
     is >> key >> value;
-    for (int i = 0; i < value; i++) {
+    for (int i = 0; i < value; i++){
         m.add(key);
     }
     return is;
 }
 
-std::ostream& operator<<(std::ostream& os, const Multiset& m) {
+std::ostream& operator<<(std::ostream& os, const Multiset& m){
     os << "{ ";
     for (const auto& [element, count] : m.data) {
-        if (std::holds_alternative<std::string>(element)) {
+        if (std::holds_alternative<std::string>(element)){
             os << std::get<std::string>(element);
-        } else if (std::holds_alternative<Multiset>(element)) {
+        } else if (std::holds_alternative<Multiset>(element)){
             os << std::get<Multiset>(element);
         }
         os << ": " << count << ", ";
@@ -56,22 +117,14 @@ std::ostream& operator<<(std::ostream& os, const Multiset& m) {
     return os;
 }
 
-void Multiset::add(const std::string& element) {
+void Multiset::add(const Element& element){
     data[element]++;
 }
 
-void Multiset::add(const Multiset& element) {
-    data[element]++;
-}
-
-void Multiset::add(const Element& element) {
-    data[element]++;
-}
-
-void Multiset::remove(const std::string& element) {
+void Multiset::remove(const std::string& element){
     auto it = data.find(element);
-    if (it != data.end()) {
-        if (it->second > 1) {
+    if (it != data.end()){
+        if (it->second > 1){
             it->second--;
         } else {
             data.erase(it);
@@ -79,7 +132,7 @@ void Multiset::remove(const std::string& element) {
     }
 }
 
-void Multiset::remove(const std::string& element, int count) {
+void Multiset::remove(const std::string& element, int count){
     auto it = data.find(element);
     if (it != data.end()) {
         if (it->second > count) {
@@ -90,7 +143,7 @@ void Multiset::remove(const std::string& element, int count) {
     }
 }
 
-void Multiset::remove(const Multiset& element) {
+void Multiset::remove(const Multiset& element){
     auto it = data.find(element);
     if (it != data.end()) {
         if (it->second > 1) {
@@ -101,19 +154,19 @@ void Multiset::remove(const Multiset& element) {
     }
 }
 
-int Multiset::uniqueElementsCount() const {
+int Multiset::uniqueElementsCount() const{
     return data.size();
 }
 
 int Multiset::size() const {
     int total = 0;
-    for (const auto& [element, cnt] : data) {
+    for (const auto& [element, cnt] : data){
         total += cnt;
     }
     return total;
 }
 
-int Multiset::count(const std::string& element) const {
+int Multiset::count(const std::string& element) const{
     auto it = data.find(element);
     if (it != data.end()) {
         return it->second;
@@ -149,53 +202,4 @@ std::string Multiset::check() const {
     }
     res += "}";
     return res;
-}
-
-void Multiset::fromString(const std::string& str) {
-    if (str.size() < 2) return;
-    if (str.front() != '{' || str.back() != '}') return;
-
-    std::string content = str.substr(1, str.size() - 2);
-    if (content.empty()) return;
-
-    std::vector<std::string> elements;
-    std::string current;
-    int depth = 0;
-
-    for (char c : content) {
-        if (c == '{') {
-            depth++;
-            current += c;
-        } else if (c == '}') {
-            depth--;
-            current += c;
-        } else if (c == ',' && depth == 0) {
-            elements.push_back(current);
-            current.clear();
-        } else {
-            current += c;
-        }
-    }
-
-    if (!current.empty()) {
-        elements.push_back(current);
-    }
-
-    for (std::string& elem : elements) {
-        while (!elem.empty() && elem.front() == ' ') {
-            elem.erase(0, 1);
-        }
-        while (!elem.empty() && elem.back() == ' ') {
-            elem.pop_back();
-        }
-
-        if (elem.empty()) continue;
-
-        if (elem.front() == '{') {
-            Multiset inner(elem);
-            add(inner);
-        } else {
-            add(elem);
-        }
-    }
 }

@@ -3,6 +3,7 @@
 #include <string>
 
 void printMenu() {
+    std::cout << "\n=== MENU ===\n";
     std::cout << "1. Create multiset from string\n";
     std::cout << "2. Add element\n";
     std::cout << "3. Remove element\n";
@@ -11,6 +12,7 @@ void printMenu() {
     std::cout << "6. Size\n";
     std::cout << "7. Unique count\n";
     std::cout << "8. Print multiset\n";
+    std::cout << "9. Compare with another multiset\n";
     std::cout << "0. Exit\n";
     std::cout << "Choice: ";
 }
@@ -18,13 +20,13 @@ void printMenu() {
 int main() {
     Multiset m;
     int choice;
-    
+
     while (true) {
         printMenu();
         std::cin >> choice;
-        
+
         if (choice == 0) break;
-        
+
         switch (choice) {
             case 1: {
                 std::cout << "Enter string: ";
@@ -73,10 +75,24 @@ int main() {
             case 8:
                 std::cout << m << "\n";
                 break;
+            case 9: {
+                std::cout << "Enter string for second multiset: ";
+                std::string s;
+                std::cin >> s;
+                Multiset other(s);
+
+                std::cout << "m == other: " << (m == other) << "\n";
+                std::cout << "m != other: " << (m != other) << "\n";
+                std::cout << "m <  other: " << (m < other) << "\n";
+                std::cout << "m >  other: " << (m > other) << "\n";
+                std::cout << "m <= other: " << (m <= other) << "\n";
+                std::cout << "m >= other: " << (m >= other) << "\n";
+                break;
+            }
             default:
                 std::cout << "Invalid choice\n";
         }
     }
-    
+
     return 0;
 }

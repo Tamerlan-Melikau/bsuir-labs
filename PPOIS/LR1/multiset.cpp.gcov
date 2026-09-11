@@ -1,0 +1,209 @@
+        -:    0:Source:src/multiset.cpp
+        -:    0:Graph:tests_cov-multiset.gcno
+        -:    0:Data:tests_cov-multiset.gcda
+        -:    0:Runs:1
+        -:    1:#include "../include/multiset.hpp"
+        -:    2:
+       38:    3:Multiset::Multiset() {
+       38:    4:}
+        -:    5:
+       16:    6:Multiset::Multiset(const std::string& str){
+       16:    7:    fromString(str);
+       16:    8:}
+        -:    9:
+       32:   10:Multiset::Multiset(const Multiset& other) : data(other.data){
+       32:   11:}
+        -:   12:
+        2:   13:Multiset& Multiset::operator=(const Multiset& other){
+        2:   14:    if (this != &other) {
+        1:   15:        data = other.data;
+        -:   16:    }
+        2:   17:    return *this;
+        -:   18:}
+        -:   19:
+       86:   20:Multiset::~Multiset(){
+       86:   21:}
+        -:   22:
+       16:   23:void Multiset::fromString(const std::string& str){
+       19:   24:    if (str.size() < 2) return;
+       15:   25:    if (str.front() != '{' || str.back() != '}') return;
+        -:   26:
+       14:   27:    std::string content = str.substr(1, str.size() - 2);
+       14:   28:    if (content.empty()) return;
+        -:   29:
+       12:   30:    std::vector<std::string> elements;
+       12:   31:    std::string current;
+       12:   32:    int depth = 0;
+        -:   33:
+      130:   34:    for (char c : content){
+      106:   35:        if (c == '{'){
+        7:   36:            depth++;
+        7:   37:            current += c;
+       99:   38:        } else if (c == '}'){
+        7:   39:            depth--;
+        7:   40:            current += c;
+       92:   41:        } else if (c == ',' && depth == 0){
+       19:   42:            elements.push_back(current);
+       19:   43:            current.clear();
+        -:   44:        } else{
+       73:   45:            current += c;
+        -:   46:        }
+        -:   47:    }
+        -:   48:
+       12:   49:    if (!current.empty()){
+       12:   50:        elements.push_back(current);
+        -:   51:    }
+        -:   52:
+       55:   53:    for (std::string& elem : elements){
+       51:   54:        while (!elem.empty() && elem.front() == ' '){
+       20:   55:            elem.erase(0, 1);
+        -:   56:        }
+       36:   57:        while (!elem.empty() && elem.back() == ' '){
+        5:   58:            elem.pop_back();
+        -:   59:        }
+        -:   60:
+      31*:   61:        if (elem.empty()) continue;
+        -:   62:
+       31:   63:        if (elem.front() == '{'){
+        6:   64:            Multiset inner(elem);
+        6:   65:            add(inner);
+        6:   66:        } else{
+       25:   67:            add(elem);
+        -:   68:        }
+        -:   69:    }
+       14:   70:}
+        -:   71:
+        6:   72:bool Multiset::operator==(const Multiset& other) const{
+        6:   73:    return data == other.data;
+        -:   74:}
+        -:   75:
+        2:   76:bool Multiset::operator!=(const Multiset& other) const{
+        2:   77:    return !(*this == other);
+        -:   78:}
+        -:   79:
+       33:   80:bool Multiset::operator<(const Multiset& other) const{
+       33:   81:    return data < other.data;
+        -:   82:}
+        -:   83:
+        3:   84:bool Multiset::operator>(const Multiset& other) const{
+        3:   85:    return other < *this;
+        -:   86:}
+        -:   87:
+        3:   88:bool Multiset::operator<=(const Multiset& other) const{
+        3:   89:    return !(other < *this);
+        -:   90:}
+        -:   91:
+        3:   92:bool Multiset::operator>=(const Multiset& other) const{
+        3:   93:    return !(*this < other);
+        -:   94:}
+        -:   95:
+        1:   96:std::istream& operator>>(std::istream& is, Multiset& m){
+        1:   97:    std::string key;
+        -:   98:    int value;
+        1:   99:    is >> key >> value;
+        4:  100:    for (int i = 0; i < value; i++){
+        3:  101:        m.add(key);
+        -:  102:    }
+        1:  103:    return is;
+        1:  104:}
+        -:  105:
+        3:  106:std::ostream& operator<<(std::ostream& os, const Multiset& m){
+        3:  107:    os << "{ ";
+        6:  108:    for (const auto& [element, count] : m.data) {
+        3:  109:        if (std::holds_alternative<std::string>(element)){
+        2:  110:            os << std::get<std::string>(element);
+        1:  111:        } else if (std::holds_alternative<Multiset>(element)){
+        1:  112:            os << std::get<Multiset>(element);
+        -:  113:        }
+        3:  114:        os << ": " << count << ", ";
+        -:  115:    }
+        3:  116:    os << "}";
+        3:  117:    return os;
+        -:  118:}
+        -:  119:
+       85:  120:void Multiset::add(const Element& element){
+       85:  121:    data[element]++;
+       85:  122:}
+        -:  123:
+        3:  124:void Multiset::remove(const std::string& element){
+        3:  125:    auto it = data.find(element);
+        3:  126:    if (it != data.end()){
+        2:  127:        if (it->second > 1){
+        1:  128:            it->second--;
+        -:  129:        } else {
+        1:  130:            data.erase(it);
+        -:  131:        }
+        -:  132:    }
+        3:  133:}
+        -:  134:
+        2:  135:void Multiset::remove(const std::string& element, int count){
+        2:  136:    auto it = data.find(element);
+        2:  137:    if (it != data.end()) {
+        2:  138:        if (it->second > count) {
+        1:  139:            it->second -= count;
+        -:  140:        } else {
+        1:  141:            data.erase(it);
+        -:  142:        }
+        -:  143:    }
+        2:  144:}
+        -:  145:
+        2:  146:void Multiset::remove(const Multiset& element){
+        2:  147:    auto it = data.find(element);
+        2:  148:    if (it != data.end()) {
+        2:  149:        if (it->second > 1) {
+        1:  150:            it->second--;
+        -:  151:        } else {
+        1:  152:            data.erase(it);
+        -:  153:        }
+        -:  154:    }
+        2:  155:}
+        -:  156:
+        6:  157:int Multiset::uniqueElementsCount() const{
+        6:  158:    return data.size();
+        -:  159:}
+        -:  160:
+       16:  161:int Multiset::size() const {
+       16:  162:    int total = 0;
+       36:  163:    for (const auto& [element, cnt] : data){
+       20:  164:        total += cnt;
+        -:  165:    }
+       16:  166:    return total;
+        -:  167:}
+        -:  168:
+       19:  169:int Multiset::count(const std::string& element) const{
+       19:  170:    auto it = data.find(element);
+       19:  171:    if (it != data.end()) {
+       16:  172:        return it->second;
+        -:  173:    }
+        3:  174:    return 0;
+        -:  175:}
+        -:  176:
+        4:  177:int Multiset::count(const Multiset& element) const {
+        4:  178:    auto it = data.find(element);
+        4:  179:    if (it != data.end()) {
+        3:  180:        return it->second;
+        -:  181:    }
+        1:  182:    return 0;
+        -:  183:}
+        -:  184:
+        5:  185:bool Multiset::contains(const std::string& element) const {
+        5:  186:    return data.find(element) != data.end();
+        -:  187:}
+        -:  188:
+        3:  189:bool Multiset::contains(const Multiset& element) const {
+        3:  190:    return data.find(element) != data.end();
+        -:  191:}
+        -:  192:
+        5:  193:std::string Multiset::check() const {
+        5:  194:    std::string res = "{";
+        9:  195:    for (const auto& [element, count] : data) {
+        4:  196:        if (std::holds_alternative<std::string>(element)) {
+        3:  197:            res += std::get<std::string>(element);
+        1:  198:        } else if (std::holds_alternative<Multiset>(element)) {
+        1:  199:            res += std::get<Multiset>(element).check();
+        -:  200:        }
+        4:  201:        res += ":" + std::to_string(count) + ", ";
+        -:  202:    }
+        5:  203:    res += "}";
+        5:  204:    return res;
+    =====:  205:}
