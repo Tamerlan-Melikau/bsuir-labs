@@ -3,7 +3,7 @@
 #include <string>
 
 void printMenu() {
-    std::cout << "\n=== MENU ===\n";
+    std::cout << "\nMenu:\n";
     std::cout << "1. Create multiset from string\n";
     std::cout << "2. Add element\n";
     std::cout << "3. Remove element\n";
@@ -96,3 +96,6 @@ int main() {
 
     return 0;
 }
+
+// g++ -std=c++17 multy_main.cpp src/multiset.cpp -o multiset
+// ./multiset

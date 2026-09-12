@@ -18,7 +18,7 @@ using Element = std::variant<std::string, Multiset>;
  */
 class Multiset {
 private:
-    std::map<Element, int> data; ///< Хранилище: элемент → количество
+    std::map<Element, int> data;
 
 public:
     /**
