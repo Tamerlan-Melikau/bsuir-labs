@@ -3,7 +3,6 @@
 #include <string>
 
 void printMenu() {
-    std::cout << "\n=== MARKOV MENU ===\n";
     std::cout << "1. Add rule\n";
     std::cout << "2. Clear rules\n";
     std::cout << "3. Show rules\n";

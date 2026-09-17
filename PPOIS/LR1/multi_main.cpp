@@ -1,6 +1,7 @@
 #include "include/multiset.hpp"
 #include <iostream>
 #include <string>
+#include <limits>
 
 void printMenu() {
     std::cout << "\nMenu:\n";
@@ -17,52 +18,62 @@ void printMenu() {
     std::cout << "Choice: ";
 }
 
+// Прочитать строку целиком, включая пробелы
+std::string readLine() {
+    std::string s;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, s);
+    return s;
+}
+
 int main() {
     Multiset m;
     int choice;
 
     while (true) {
         printMenu();
-        std::cin >> choice;
+
+        // Защита от "залипшего" потока
+        if (!(std::cin >> choice)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid choice\n";
+            continue;
+        }
 
         if (choice == 0) break;
 
         switch (choice) {
             case 1: {
                 std::cout << "Enter string: ";
-                std::string s;
-                std::cin >> s;
+                std::string s = readLine();
                 m = Multiset(s);
-                std::cout << "Created!\n";
+                std::cout << "Created\n";
                 break;
             }
             case 2: {
                 std::cout << "Enter element: ";
-                std::string e;
-                std::cin >> e;
+                std::string e = readLine();
                 m.add(e);
                 std::cout << "Added!\n";
                 break;
             }
             case 3: {
                 std::cout << "Enter element: ";
-                std::string e;
-                std::cin >> e;
+                std::string e = readLine();
                 m.remove(e);
-                std::cout << "Removed!\n";
+                std::cout << "Removed\n";
                 break;
             }
             case 4: {
                 std::cout << "Enter element: ";
-                std::string e;
-                std::cin >> e;
+                std::string e = readLine();
                 std::cout << (m.contains(e) ? "Yes" : "No") << "\n";
                 break;
             }
             case 5: {
                 std::cout << "Enter element: ";
-                std::string e;
-                std::cin >> e;
+                std::string e = readLine();
                 std::cout << "Count: " << m.count(e) << "\n";
                 break;
             }
@@ -77,8 +88,7 @@ int main() {
                 break;
             case 9: {
                 std::cout << "Enter string for second multiset: ";
-                std::string s;
-                std::cin >> s;
+                std::string s = readLine();
                 Multiset other(s);
 
                 std::cout << "m == other: " << (m == other) << "\n";
@@ -96,6 +106,3 @@ int main() {
 
     return 0;
 }
-
-// g++ -std=c++17 multy_main.cpp src/multiset.cpp -o multiset
-// ./multiset

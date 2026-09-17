@@ -315,3 +315,7 @@ TEST_CASE("Parse with spaces before commas", "[multiset]") {
     REQUIRE(m.count("b") == 1);
     REQUIRE(m.count("c") == 1);
 }
+
+// g++ -std=c++17 --coverage -Iinclude -Itests tests/test_multiset.cpp src/multiset.cpp -o tests/test_multiset.exe
+// .\tests\test_multiset.exe
+// gcovr --filter ".*multiset\.(cpp|hpp)"

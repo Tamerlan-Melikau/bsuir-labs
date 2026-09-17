@@ -143,3 +143,8 @@ TEST_CASE("output multiple rules", "[markov]") {
     REQUIRE(result.find("a -> b") != std::string::npos);
     REQUIRE(result.find("c -> .") != std::string::npos);
 }
+
+
+// g++ -std=c++17 --coverage -Iinclude -Itests tests/test_markov.cpp src/markov_algorithm.cpp -o tests/test_markov.exe
+// .\tests\test_markov.exe
+// gcovr --filter ".*markov_algorithm\.(cpp|hpp)"

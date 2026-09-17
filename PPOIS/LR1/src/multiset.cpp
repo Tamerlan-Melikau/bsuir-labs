@@ -21,8 +21,8 @@ Multiset::~Multiset(){
 }
 
 void Multiset::fromString(const std::string& str){
-    if (str.size() < 2) return;
-    if (str.front() != '{' || str.back() != '}') return;
+    if(str.size() < 2)return;
+    if(str.front() != '{' || str.back() != '}')return;
 
     std::string content = str.substr(1, str.size() - 2);
     if (content.empty()) return;
