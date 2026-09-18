@@ -107,3 +107,6 @@ int main(){
     barberThread.join();
     return 0;
 }
+
+// g++ -std=c++20 -pthread main.cpp -o barber
+// ./barber
