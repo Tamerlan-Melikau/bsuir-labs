@@ -1,6 +1,22 @@
 #include <string>
 #include <iostream>
 
+class Cast{
+private:
+    int actorsCount;
+public:
+    Cast(int actorsCount)
+        :actorsCount(actorsCount){}
+    virtual ~Cast(){}
+
+    void addActor(){
+        actorsCount++;
+        std::cout << "Actor added. Total: " << actorsCount << "\n";
+    }
+    int getActor() const{return actorsCount;}
+    void printInfo(){std::cout << "Actors in cast: " << actorsCount << "\n";}
+};
+
 class Spectator{
 private:
     int id;
@@ -9,13 +25,16 @@ private:
     int salary;
     std::string sector;
     int placeNumber;
+    double balance;
 public:
-    Spectator(int id, std::string name, int age, int sal, std::string sec, int place)
-        :id(id), name(name), age(age), salary(sal), sector(sec), placeNumber(place){}
-
+    Spectator(int id, std::string name, int age, int sal, std::string sec, int place, double balance)
+        :id(id), name(name), age(age), salary(sal), sector(sec), placeNumber(place), balance(balance){}
     virtual ~Spectator(){}
 
     void buyTicket(){std::cout << name << " buy ticket\n";}
+    void pay(){balance -= 100; std::cout << name << " paid\n";}
+    void leaveReview(){std::cout << name << " left a review\n";}
+    void arrive(){std::cout << name << " arrived at the theater\n";}
 };
 
 class Worker{
@@ -27,7 +46,6 @@ protected:
 public:
     Worker(int id, std::string name, int age, int salary)
         :id(id), name(name), age(age), salary(salary){}
-
     virtual ~Worker(){}
     
     std::string getName() const{return name;}
@@ -35,16 +53,6 @@ public:
     int getage() const{return age;}
     void setName(const std::string& newName){name = newName;}
     int getsalary() const{return salary;}
-};
-
-class Actor:public Worker{
-private:
-    int experience;
-public:
-    Actor(int id, std::string name, int age, int exp, int salary):
-    Worker(id, name, age, salary), experience(exp){}
-
-    void perform(){std::cout << name << " play the role\n";} 
 };
 
 class Director:public Worker{
@@ -56,6 +64,9 @@ public:
     Worker(id, name, age, salary), rewards(rew), experience(exp){}
 
     void direct(){std::cout << name << " puts the play\n";}
+    void chooseScript(){std::cout << name << " chooses a script\n";}
+    void giveNotes(){std::cout << name << " gives notes to actors\n";}
+    void approveCostumes(){std::cout << name << " approves costumes\n";}
 };
 
 class Administrator:public Worker{
@@ -95,6 +106,137 @@ public:
     void accept(){std::cout << name << " accepts offers";}
 };
 
+class Composer:public Worker{
+private:
+    int worksCount;
+    std::string instrument;
+public:
+    Composer(int id, std::string name, int age, int salary, int works, std::string inst)
+        :Worker(id, name, age, salary), worksCount(works), instrument(inst){}
+
+    void composeMusic(){std::cout << name << " composes music\n";}
+};
+
+class Playwright:public Worker{
+private:
+    int playsWritten;
+    std::string genre;
+public:
+    Playwright(int id, std::string name, int age, int salary, int plays, std::string gen)
+        :Worker(id, name, age, salary), playsWritten(plays), genre(gen){}
+
+    void writePlay(){std::cout << name << " write the play\n";}
+};
+
+class Choreographer:public Worker{
+private:
+    int experience;
+public:
+    Choreographer(int id, std::string name, int age, int salary, int exp)
+        :Worker(id, name, age, salary), experience(exp){}
+
+    void stageDance(){std::cout << name << " sets the dance\n";}
+    void teachDancers(){std::cout << name << " trains dancers\n";}
+};
+
+class SoundDesigner:public Worker{
+private:
+    int tracksCount;
+public:
+    SoundDesigner(int id, std::string name, int age, int salary, int tr)
+        :Worker(id, name, age, salary), tracksCount(tr){}
+
+    void createMusic(){std::cout << name << " creates music\n";}
+    void setupMicrophones(){std::cout << name << " sets mikrophones\n";}
+};
+
+class Conductor:public Worker{
+private:
+    int experience;
+    std::string orchestraName;
+public:
+    Conductor(int id, std::string name, int age, int salary, int exp, std::string orch)
+        :Worker(id, name, age, salary), experience(exp), orchestraName(orch){}
+
+    void conduct(){std::cout << name << " conducting\n"; }
+    void rehearseOrchestra(){std::cout << name << " rehearses with orchestra\n";}
+};
+
+class Musician:public Worker{
+private:
+    std::string instrument;
+public:
+    Musician(int id, std::string name, int age, int salary, std::string inst)
+        :Worker(id, name, age, salary), instrument(inst){}
+
+    void playInstrument(){std::cout << name << " play on " << instrument << "\n";}
+    void tuneInstrument(){std::cout << name << " set the instrument\n";}
+};
+
+class Violinist{
+private:
+    std::string name;
+    int experience;
+public:
+    Violinist(std::string n, int exp)
+        :name(n), experience(exp){}
+    void play(){std::cout << name << " plays violin\n";}
+};
+
+class Cellist{
+private:
+    std::string name;
+    int experience;
+public:
+    Cellist(std::string n, int exp)
+        :name(n), experience(exp){}
+    void play(){std::cout << name << " plays cello\n";}
+};
+
+class Pianist{
+private:
+    std::string name;
+    int experience;
+public:
+    Pianist(std::string n, int exp)
+        :name(n), experience(exp){}
+    void play(){std::cout << name << " plays piano\n";}
+};
+
+class Flutist{
+private:
+    std::string name;
+    int experience;
+public:
+    Flutist(std::string n, int exp)
+        :name(n), experience(exp){}
+    void play(){std::cout << name << " plays flute\n";}
+};
+
+class Contrabassist{
+private:
+    std::string name;
+    int experience;
+public:
+    Contrabassist(std::string n, int exp)
+        :name(n), experience(exp){}
+    void play(){std::cout << name << " plays contrabass\n";}
+};
+
+class Actor:public Worker{
+private:
+    int experience;
+    int height;
+public:
+    Actor(int id, std::string name, int age, int exp, int salary, int height):
+    Worker(id, name, age, salary), experience(exp), height(height){}
+
+    void perform(){std::cout << name << " play the role\n";}
+    void rehearse(){std::cout << name << " rehearses\n";}
+    void memorizeLines(){std::cout << name << " memorizes lines\n";}
+    void takeBreak(){std::cout << name << " takes a break\n";}
+};
+
 class Acrobat:public Worker{
 private:
     int experince;
@@ -123,6 +265,10 @@ private:
 public:
     Cleaner(int id, std::string name, int age, int salary, int hours)
     :Worker(id, name, age, salary), hours(hours){}
+
+    void work(){std::cout << "Works " << hours << "hour";}
+    void mop(){std::cout << name << " mops floor\n";}
+    void vacuum(){std::cout << name << " vacuums the hall\n";}
 };
 
 class Doctor:public Worker{
@@ -135,51 +281,6 @@ public:
     void examine(){std::cout << name << " осматривает пациента\n";}
     void prescribeMedicine(){ std::cout << name << " выписывает лекарство\n";}
     void giveSickLeave(){ std::cout << name << " выдает больничный\n";}
-};
-
-class Playwright:public Worker{
-private:
-    int playsWritten;
-    std::string genre;
-public:
-    Playwright(int id, std::string name, int age, int salary, int plays, std::string gen)
-        :Worker(id, name, age, salary), playsWritten(plays), genre(gen){}
-
-    void writePlay(){std::cout << name << " write the play\n";}
-};
-
-class Composer:public Worker{
-private:
-    int worksCount;
-    std::string instrument;
-public:
-    Composer(int id, std::string name, int age, int salary, int works, std::string inst)
-        :Worker(id, name, age, salary), worksCount(works), instrument(inst){}
-
-    void composeMusic(){std::cout << name << " composes music\n";}
-};
-
-class Conductor:public Worker{
-private:
-    int experience;
-    std::string orchestraName;
-public:
-    Conductor(int id, std::string name, int age, int salary, int exp, std::string orch)
-        :Worker(id, name, age, salary), experience(exp), orchestraName(orch){}
-
-    void conduct(){std::cout << name << " conducting\n"; }
-    void rehearseOrchestra(){std::cout << name << " rehearses with orchestra\n";}
-};
-
-class Musician:public Worker{
-private:
-    std::string instrument;
-public:
-    Musician(int id, std::string name, int age, int salary, std::string inst)
-        :Worker(id, name, age, salary), instrument(inst){}
-
-    void playInstrument(){std::cout << name << " play on " << instrument << "\n";}
-    void tuneInstrument(){std::cout << name << " set the instrument\n";}
 };
 
 class Singer:public Worker{
@@ -205,17 +306,6 @@ public:
     void rehearseNumber(){std::cout << name << " rehearses number\n";}
 };
 
-class Choreographer:public Worker{
-private:
-    int experience;
-public:
-    Choreographer(int id, std::string name, int age, int salary, int exp)
-        :Worker(id, name, age, salary), experience(exp){}
-
-    void stageDance(){std::cout << name << " sets the dance\n";}
-    void teachDancers(){std::cout << name << " trains dancers\n";}
-};
-
 class MakeupArtist:public Worker{
 private:
     int clientsPerDay;
@@ -227,17 +317,6 @@ public:
     void removeMakeup(){std::cout << name << " takes off makeup\n";}
 };
 
-class SoundDesigner:public Worker{
-private:
-    int tracksCount;
-public:
-    SoundDesigner(int id, std::string name, int age, int salary, int tr)
-        :Worker(id, name, age, salary), tracksCount(tr){}
-
-    void createMusic(){std::cout << name << " creates music\n";}
-    void setupMicrophones(){std::cout << name << " sets mikrophones\n";}
-};
-
 class Bartender:public Worker{
     private:
     int soldAmount;
@@ -246,4 +325,15 @@ public:
         :Worker(id, name, age, salary), soldAmount(amount){}
 
     void sellfood(){std::cout << name << " sells food\n";}
+};
+
+class Security:public Worker{
+private:
+    std::string gunType;
+public:
+    Security(int id, std::string name, int age, int salary, std::string gun):
+    Worker(id, name, age, salary), gunType(gun){}
+
+    void patrol(){std::cout << "Patroling the area;\n";}
+    void type(){std::cout << "Gun type: " << gunType;}
 };
