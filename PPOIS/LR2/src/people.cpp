@@ -50,9 +50,10 @@ public:
 class Director:public Worker{
 private:
     int rewards;
+    int experience;
 public:
-    Director(int id, std::string name, int age, int salary, int rew):
-    Worker(id, name, age, salary), rewards(rew){}
+    Director(int id, std::string name, int age, int salary, int rew, int exp):
+    Worker(id, name, age, salary), rewards(rew), experience(exp){}
 
     void direct(){std::cout << name << " puts the play\n";}
 };
@@ -60,9 +61,10 @@ public:
 class Administrator:public Worker{
 private:
     int metingAmount;
+    int experience;
 public:
-    Administrator(int id, std::string name, int age, int salary, int met):
-    Worker(id, name, age, salary), metingAmount(met){}
+    Administrator(int id, std::string name, int age, int salary, int met, int exp):
+    Worker(id, name, age, salary), metingAmount(met), experience(exp){}
 
     void createSchedule(){std::cout << name << " creates schedule";}
     void controlBudget(){std::cout << name << " controls expenses";}
@@ -72,9 +74,12 @@ public:
 };
 
 class Accountant:public Worker{
+private:
+    int amountOfDocuments;
+    int amountOfMetings;
 public:
-    Accountant(int id, std::string name, int age, int salary):
-    Worker(id, name, age, salary){}
+    Accountant(int id, std::string name, int age, int salary, int doc, int met):
+    Worker(id, name, age, salary), amountOfDocuments(doc), amountOfMetings(met){}
 
     void document(){std::cout << name << " maintainces documentation";}
 };
@@ -82,9 +87,10 @@ public:
 class HRManager:public Worker{
 private:
     int amountOfTakenPeople;
+    int amountOfMetings;
 public:
-    HRManager(int id, std::string name, int age, int salary, int people):
-    Worker(id, name, age, salary), amountOfTakenPeople(people){}
+    HRManager(int id, std::string name, int age, int salary, int people, int met):
+    Worker(id, name, age, salary), amountOfTakenPeople(people), amountOfMetings(met){}
 
     void accept(){std::cout << name << " accepts offers";}
 };
