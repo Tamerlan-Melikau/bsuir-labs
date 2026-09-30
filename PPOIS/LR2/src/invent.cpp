@@ -2,21 +2,18 @@
 
 Costume::Costume(int num, int cost, int size, std::string color)
     :inventNumber(num), cost(cost), size(size), color(color){}
-Costume::~Costume(){}
 
 void Costume::tryOn(){std::cout << "Suit " << inventNumber << "примеряется";}
 void Costume::repair(){std::cout << "Costume " << inventNumber << " repaired\n";}
 
 Decoration::Decoration(int num, int cost, Stage st)
     :inventNumber(num), cost(cost), stage(st){}
-Decoration::~Decoration(){}
 
 void Decoration::use(){std::cout << "Decoration " << inventNumber << "usess";}
 void Decoration::dismantle(){std::cout << "Decoration " << inventNumber << " dismantled\n";}
 
 Instrument::Instrument(int cost, std::string type, int yold, std::string sound)
     :cost(cost), type(type), yold(yold), sound(sound){}
-Instrument::~Instrument(){}
 
 void Instrument::repairString(){std::cout << "String repaired\n";}
 void Instrument::checkCondition(int yold){
@@ -56,7 +53,6 @@ void Contrabass::makeSound(){std::cout << "Sound: " << sound;}
 
 Equipment::Equipment(int cost, std::string brand)
     :cost(cost), brand(brand){}
-Equipment::~Equipment(){}
 
 Speaker::Speaker(int cost, std::string brand, int ch, int vol, Hall h)
     :Equipment(cost, brand), channels(ch), maxVolume(vol), hall(h){}

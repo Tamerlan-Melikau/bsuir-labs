@@ -14,7 +14,7 @@ private:
     int posterSize;
 public:
     Playbill(std::string title, int price, std::string date);
-    virtual ~Playbill();
+    virtual ~Playbill() = default;
 
     void announce();
     void data();
@@ -47,7 +47,7 @@ private:
     int ticketsSold;
 public:
     Performance(std::time_t data, int boxOffice, Director d, Hall h, Cast c, int cap);
-    virtual ~Performance();
+    virtual ~Performance() = default;
 
     void setdata(const std::time_t& newData);
     void hold();
@@ -64,7 +64,7 @@ private:
     Actor leadActor;
 public:
     Rehearsal(std::time_t data, int amount, int peopleCount, Stage st, Actor a);
-    virtual ~Rehearsal();
+    virtual ~Rehearsal() = default;
 
     void setdata(const std::time_t& newData);
     void setAmount(int newAmount);
@@ -82,7 +82,7 @@ private:
     Playbill playbill;
 public:
     Tour(std::string city, int days, double budget, int sold, Playbill pb);
-    virtual ~Tour();
+    virtual ~Tour() = default;
 
     void start();
     void end();
@@ -100,7 +100,7 @@ private:
     bool isHoliday;
 public:
     Schedule(int d, int m, int y, int events);
-    virtual ~Schedule();
+    virtual ~Schedule() = default;
 
     void addEvent();
     void printDay();
@@ -117,7 +117,7 @@ private:
     std::string snackMenu;
 public:
     Intermission(int duration, std::string time, bool buffet);
-    virtual ~Intermission();
+    virtual ~Intermission() = default;
 
     void start();
     void extend();

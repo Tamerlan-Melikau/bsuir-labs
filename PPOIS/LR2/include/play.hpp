@@ -12,7 +12,7 @@ private:
     bool learned_ = false;
 public:
     Role(std::string name, int lines, int dur);
-    virtual ~Role();
+    virtual ~Role() = default;
 
     void learn();
     void perform();
@@ -30,7 +30,7 @@ private:
     bool isAlive;
 public:
     Character(std::string name, int age, std::string description);
-    virtual ~Character();
+    virtual ~Character() = default;
 
     void describe();
     void kill();
@@ -47,7 +47,7 @@ private:
     Character mainChar;
 public:
     Scene(int number, int duration, std::string location, Character mc);
-    virtual ~Scene();
+    virtual ~Scene() = default;
 
     void start();
     void finish();
@@ -64,7 +64,7 @@ private:
     Scene firstScene;
 public:
     Act(int n, int s, std::string t, Scene fs);
-    virtual ~Act();
+    virtual ~Act() = default;
 
     void printInfo();
 };
@@ -76,7 +76,7 @@ private:
     std::string roleName;
 public:
     Audition(std::string d, int a, std::string r);
-    virtual ~Audition();
+    virtual ~Audition() = default;
 
     void start();
 };

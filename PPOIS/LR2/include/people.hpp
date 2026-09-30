@@ -11,7 +11,7 @@ private:
     int actorsCount;
 public:
     Cast(int actorsCount);
-    virtual ~Cast();
+    virtual ~Cast() = default;
 
     void addActor();
     void printInfo();
@@ -30,7 +30,7 @@ private:
     double balance;
 public:
     Spectator(int id, std::string name, int age, int sal, std::string sec, int place, double balance);
-    virtual ~Spectator();
+    virtual ~Spectator() = default;
 
     void buyTicket();
     void pay();
@@ -46,7 +46,7 @@ protected:
     int salary;
 public:
     Worker(int id, std::string name, int age, int salary);
-    virtual ~Worker();
+    virtual ~Worker() = default;
 
     std::string getName() const{return name;}
     int getid() const{return id;}
@@ -154,7 +154,7 @@ protected:
     int experience;
 public:
     Musician(std::string n, int exp);
-    virtual ~Musician();
+    virtual ~Musician() = default;
 
     std::string getName() const{return name;}
     int getExperience() const{return experience;}

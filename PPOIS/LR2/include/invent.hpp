@@ -13,7 +13,7 @@ private:
     std::string material;
 public:
     Costume(int num, int cost, int size, std::string color);
-    virtual ~Costume();
+    virtual ~Costume() = default;
 
     void tryOn();
     void repair();
@@ -27,7 +27,7 @@ private:
     Stage stage;
 public:
     Decoration(int num, int cost, Stage st);
-    virtual ~Decoration();
+    virtual ~Decoration() = default;
 
     void use();
     void dismantle();
@@ -42,7 +42,7 @@ protected:
     std::string sound;
 public:
     Instrument(int cost, std::string type, int yold, std::string sound);
-    virtual ~Instrument();
+    virtual ~Instrument() = default;
 
     int getcost(){return cost;}
     std::string gettype(){return type;}
@@ -106,7 +106,7 @@ protected:
     std::string brand;
 public:
     Equipment(int cost, std::string brand);
-    virtual ~Equipment();
+    virtual ~Equipment() = default;
 
     int getCost() const{return cost;}
     std::string getBrand() const{return brand;}

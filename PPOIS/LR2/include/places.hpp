@@ -10,7 +10,7 @@ private:
     std::string floorType;
 public:
     Stage(int size, bool hasOrchestraPit);
-    virtual ~Stage();
+    virtual ~Stage() = default;
 
     void prepare();
     void clear();
@@ -25,7 +25,7 @@ private:
     Stage stage;
 public:
     Hall(int capacity, bool hasBalcony, Stage st);
-    virtual ~Hall();
+    virtual ~Hall() = default;
 
     void dimLights();
     void fill(int people);
@@ -42,7 +42,7 @@ private:
     bool occupied;
 public:
     DressingRoom(int number, int mirrors, bool hasSofa);
-    virtual ~DressingRoom();
+    virtual ~DressingRoom() = default;
 
     void occupy();
     void vacate();
@@ -56,7 +56,7 @@ private:
     double revenue;
 public:
     Buffet(int menuSize, bool isOpen);
-    virtual ~Buffet();
+    virtual ~Buffet() = default;
 
     void open();
     void close();

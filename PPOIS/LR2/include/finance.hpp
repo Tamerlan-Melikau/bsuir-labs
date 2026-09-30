@@ -12,7 +12,7 @@ private:
     Spectator owner;
 public:
     Ticket(int cost, bool vip, int row, Spectator s);
-    virtual ~Ticket();
+    virtual ~Ticket() = default;
 
     void print();
 
@@ -30,7 +30,7 @@ private:
     Contract contract;
 public:
     Sponsor(int id, std::string name, std::string company, double budget, Contract c);
-    virtual ~Sponsor();
+    virtual ~Sponsor() = default;
 
     void donate();
     void signContract();

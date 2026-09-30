@@ -14,7 +14,7 @@ private:
     bool signed_ = false;
 public:
     Contract(int salary, std::string strtedData, Worker w);
-    virtual ~Contract();
+    virtual ~Contract() = default;
 
     void setSalary(int newSal);
     void sign();
@@ -29,7 +29,7 @@ private:
     std::string channel;
 public:
     Advertisement(int budget, int views);
-    virtual ~Advertisement();
+    virtual ~Advertisement() = default;
 
     void start();
     void viewers();
@@ -46,7 +46,7 @@ private:
     Worker recipient_;
 public:
     Award(std::string t, int y, std::string c, Worker r);
-    virtual ~Award();
+    virtual ~Award() = default;
 
     void give();
     void printInfo();
@@ -61,7 +61,7 @@ private:
     Costume costume;
 public:
     Warehouse(int i, int c, Costume co);
-    virtual ~Warehouse();
+    virtual ~Warehouse() = default;
 
     void store();
     void take();
