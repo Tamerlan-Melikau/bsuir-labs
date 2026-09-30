@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "places.hpp"
+#include "exceptions.hpp"
 
 class Costume{
 private:
@@ -49,6 +50,10 @@ public:
     int getcost(){return cost;}
     std::string gettype(){return type;}
     void repairString(){std::cout << "String repaired\n";}
+    void checkCondition(int yold){
+        if(yold > 50) throw InstrumentBrokenException();
+        std::cout << "Instrument is fine\n";
+    }
 };
 
 class Violin:public Instrument{

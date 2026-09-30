@@ -30,7 +30,10 @@ public:
     virtual ~Hall(){};
 
     void dimLights(){std::cout << "Hall lights dimmed\n";}
-    void fill(){std::cout << "Hall is filled\n";}
+    void fill(int people){
+        if(people > capacity) throw HallOverflowException();
+        std::cout << "Hall is filled with " << people << " people\n";
+    }
     void empty(){std::cout << "Hall is empty\n";}
     int getCapacity() const{return capacity;}
 };

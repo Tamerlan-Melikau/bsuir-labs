@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include "exceptions.hpp"
 
 class Role{
 private:
@@ -8,15 +9,23 @@ private:
     int linesCount;
     int durationMin;
     bool isMain;
+    bool learned_ = false;
 public:
     Role(std::string name, int lines, int dur)
         :name(name), linesCount(lines), durationMin(dur){}
     virtual ~Role(){}
 
-    void learn(){std::cout << "Learning role: " << name << "\n";}
+    void learn(){
+        learned_ = true;
+        std::cout << "Learning role: " << name << "\n";
+    }
     int getLines() const{return linesCount;}
     void setLines(int newLines){linesCount = newLines;}
     bool isMainRole() const{return isMain;}
+    void perform(){
+        if(!learned_) throw RoleNotLearnedException();
+        std::cout << "Performing role: " << name << "\n";
+    }
 };
 
 class Character{

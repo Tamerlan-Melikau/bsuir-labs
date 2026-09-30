@@ -1,6 +1,5 @@
 #pragma once
 #include <exception>
-#include "exceptions.hpp"
 
 class InvalidAgeException:public std::exception{
 public:
@@ -30,9 +29,58 @@ public:
     }
 };
 
-class HallOverflowException : public std::exception{
+class HallOverflowException:public std::exception{
 public:
     const char* what() const noexcept override{
         return "Hall capacity exceeded";
+    }
+};
+
+class WarehouseFullException:public std::exception{
+public:
+    const char* what() const noexcept override{
+        return "Warehouse is full";
+    }
+};
+
+class InstrumentBrokenException:public std::exception{
+public:
+    const char* what() const noexcept override{
+        return "Instrument is broken";
+    }
+};
+
+class BudgetExceededException:public std::exception{
+public:
+    const char* what() const noexcept override{
+        return "Budget exceeded";
+    }
+};
+
+class ContractNotSignedException:public std::exception{
+public:
+    const char* what() const noexcept override{
+        return "Contract not signed";
+    }
+};
+
+class RoleNotLearnedException:public std::exception{
+public:
+    const char* what() const noexcept override{
+        return "Role is not learned";
+    }
+};
+
+class InvalidDateException:public std::exception{
+public:
+    const char* what() const noexcept override{
+        return "Invalid date";
+    }
+};
+
+class TicketSoldOutException:public std::exception{
+public:
+    const char* what() const noexcept override{
+        return "Ticket is sold out";
     }
 };

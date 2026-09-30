@@ -4,6 +4,7 @@
 #include <ctime>
 #include "places.hpp"
 #include "people.hpp"
+#include "exceptions.hpp"
 
 class Playbill{
 private:
@@ -30,13 +31,20 @@ private:
     Director director;
     Hall hall;
     Cast cast;
+    int capacity;
+    int ticketsSold;
 public:
-    Performance(std::time_t data, int boxOffice, Director d, Hall h, Cast c)
-        :data(data), boxOffice(boxOffice), director(d), hall(h), cast(c){}
+    Performance(std::time_t data, int boxOffice, Director d, Hall h, Cast c, int cap)
+        :data(data), boxOffice(boxOffice), director(d), hall(h), cast(c), capacity(cap), ticketsSold(0){}
     virtual ~Performance(){}
 
     void setdata(const std::time_t& newData){data = newData;}
     void hold(){std::cout << "Performance " << title << " on hold\n";}
+    void sellTicket(){         // ← новый метод
+        if(ticketsSold >= capacity) throw TicketSoldOutException();
+        ticketsSold++;
+        std::cout << "Ticket sold. Total: " << ticketsSold << "\n";
+    }
 };
 
 class Rehearsal{
@@ -74,6 +82,11 @@ public:
     void start(){std::cout << "Tour in " << city << " started\n";}
     double getProfit() const{return ticketsSold * 100.0 - budget;}
     void end(){std::cout << "Tour ended\n";}
+    void spend(double amount){
+        if(amount > budget) throw BudgetExceededException();
+        budget -= amount;
+        std::cout << "Spent " << amount << ", left: " << budget << "\n";
+    }
 };
 
 class Schedule{
@@ -84,8 +97,13 @@ private:
     int eventsCount;
     bool isHoliday;
 public:
-    Schedule(int d, int m, int y, int events)
-        :day(d), month(m), year(y), eventsCount(events){}
+    Schedule(int d, int m, int y, int events){
+        if(d < 1 || d > 31 || m < 1 || m > 12) throw InvalidDateException();
+        this->day = d;
+        this->month = m;
+        this->year = y;
+        this->eventsCount = events;
+    }
     virtual ~Schedule(){}
 
     void addEvent(){eventsCount++;}

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "people.hpp"
 #include "invent.hpp"
+#include "exceptions.hpp"
 
 class Contract{
 private:
@@ -10,14 +11,22 @@ private:
     std::string strtedData;
     int months;
     Worker worker;
+    bool signed_ = false;
 public:
     Contract(int salary, std::string strtedData, Worker w)
         :salary(salary), strtedData(strtedData), worker(w){}
     virtual ~Contract(){}
 
     void setSalary(int newSal){salary = newSal;}
-    void sign(){std::cout << "Sign the contract";}
+    void sign(){
+        signed_ = true;
+        std::cout << "Sign the contract";
+    }
     void terminate(){std::cout << "Contract terminated\n";}
+    void work(){
+        if(!signed_) throw ContractNotSignedException();
+        std::cout << "Working under contract\n";
+    }
 };
 
 class Advertisement{
@@ -64,7 +73,11 @@ public:
         :itemsCount(i), capacity(c), costume(co){}
     virtual ~Warehouse(){}
 
-    void store(){itemsCount++; std::cout << "Stored. Total: " << itemsCount << "\n";}
+    void store(){
+        if(itemsCount >= capacity) throw WarehouseFullException();
+        itemsCount++;
+        std::cout << "Stored. Total: " << itemsCount << "\n";
+    }
     void take(){itemsCount--; std::cout << "Taken. Total: " << itemsCount << "\n";}
     bool isFull(){return itemsCount >= capacity;}   
 };

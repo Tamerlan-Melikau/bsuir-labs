@@ -169,9 +169,10 @@ class Conductor:public Worker{
 private:
     int experience;
     std::string orchestraName;
+    Instrument instrument;
 public:
-    Conductor(int id, std::string name, int age, int salary, int exp, std::string orch)
-        :Worker(id, name, age, salary), experience(exp), orchestraName(orch){}
+    Conductor(int id, std::string name, int age, int salary, int exp, std::string orch, Instrument inst)
+        :Worker(id, name, age, salary), experience(exp), orchestraName(orch), instrument(inst){}
 
     void conduct(){std::cout << name << " conducting\n"; }
     void rehearseOrchestra(){std::cout << name << " rehearses with orchestra\n";}
