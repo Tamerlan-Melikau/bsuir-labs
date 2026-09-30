@@ -1,14 +1,18 @@
+#pragma once
 #include <string>
 #include <iostream>
+#include "people.hpp"
+#include "invent.hpp"
 
 class Contract{
 private:
     int salary;
     std::string strtedData;
     int months;
+    Worker worker;
 public:
-    Contract(int salary, std::string strtedData)
-        :salary(salary), strtedData(strtedData){}
+    Contract(int salary, std::string strtedData, Worker w)
+        :salary(salary), strtedData(strtedData), worker(w){}
     virtual ~Contract(){}
 
     void setSalary(int newSal){salary = newSal;}
@@ -38,9 +42,10 @@ private:
     std::string category;
     std::string recipient;
     int prizeMoney;
+    Worker recipient_;
 public:
-    Award(std::string t, int y, std::string c)
-        :title(t), year(y), category(c){}
+    Award(std::string t, int y, std::string c, Worker r)
+        :title(t), year(y), category(c), recipient_(r){}
     virtual ~Award(){}
 
     void give(){std::cout << "Awarded: " << title << "\n";}
@@ -53,9 +58,10 @@ private:
     int itemsCount;
     int capacity;
     std::string address;
+    Costume costume;
 public:
-    Warehouse(int i, int c)
-        :itemsCount(i), capacity(c){}
+    Warehouse(int i, int c, Costume co)
+        :itemsCount(i), capacity(c), costume(co){}
     virtual ~Warehouse(){}
 
     void store(){itemsCount++; std::cout << "Stored. Total: " << itemsCount << "\n";}

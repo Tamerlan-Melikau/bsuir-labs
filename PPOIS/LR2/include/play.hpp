@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <iostream>
 
@@ -16,23 +17,6 @@ public:
     int getLines() const{return linesCount;}
     void setLines(int newLines){linesCount = newLines;}
     bool isMainRole() const{return isMain;}
-    };
-
-class Scene{
-private:
-    int number;
-    int duration;
-    std::string location;
-    int actNumber;
-public:
-    Scene(int number, int duration, std::string location)
-        :number(number), duration(duration), location(location){}
-    virtual ~Scene(){}
-
-    void start(){std::cout << "Scene " << number << " started\n";}
-    int getDuration() const{return duration;}
-    void setLocation(const std::string& newLoc){location = newLoc;}
-    void finish(){std::cout << "Scene " << number << " finished\n";}
 };
 
 class Character{
@@ -51,14 +35,33 @@ public:
     void kill(){isAlive = false; std::cout << name << " died\n";}
 };
 
+class Scene{
+private:
+    int number;
+    int duration;
+    std::string location;
+    int actNumber;
+    Character mainChar;
+public:
+    Scene(int number, int duration, std::string location, Character mc)
+        :number(number), duration(duration), location(location), mainChar(mc){}
+    virtual ~Scene(){}
+
+    void start(){std::cout << "Scene " << number << " started\n";}
+    int getDuration() const{return duration;}
+    void setLocation(const std::string& newLoc){location = newLoc;}
+    void finish(){std::cout << "Scene " << number << " finished\n";}
+};
+
 class Act{
 private:
     int number;
     int scenesCount;
     std::string title;
+    Scene firstScene;
 public:
-    Act(int n, int s, std::string t)
-        :number(n), scenesCount(s), title(t){}
+    Act(int n, int s, std::string t, Scene fs)
+        :number(n), scenesCount(s), title(t), firstScene(fs){}
     virtual ~Act(){}
 
     void printInfo(){std::cout << "Act " << number << ": " << title << "\n";}

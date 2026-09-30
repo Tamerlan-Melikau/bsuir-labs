@@ -1,15 +1,38 @@
+#pragma once
 #include <string>
 #include <iostream>
 #include <ctime>
+#include "places.hpp"
+#include "people.hpp"
+
+class Playbill{
+private:
+    std::string title;
+    int price;
+    std::string date;
+    int posterSize;
+public:
+    Playbill(std::string title, int price, std::string date)
+        :title(title), price(price), date(date){}
+    virtual ~Playbill(){}
+
+    void announce(){std::cout << "Announcing: " << title << "\n";}
+    void data(){std::cout << "Data: " << date;}
+    int getPrice() const{return price;}
+    void printPoster(){std::cout << "Poster printed: " << title << "\n";}
+};
 
 class Performance{
 private:
     std::time_t data;
     int boxOffice;
     std::string title;
+    Director director;
+    Hall hall;
+    Cast cast;
 public:
-    Performance(std::time_t data, int boxOffice)
-        :data(data), boxOffice(boxOffice){}
+    Performance(std::time_t data, int boxOffice, Director d, Hall h, Cast c)
+        :data(data), boxOffice(boxOffice), director(d), hall(h), cast(c){}
     virtual ~Performance(){}
 
     void setdata(const std::time_t& newData){data = newData;}
@@ -22,9 +45,11 @@ private:
     int amount;
     int peopleCount;
     std::string location;
+    Stage stage;
+    Actor leadActor;
 public:
-    Rehearsal(std::time_t data, int amount, int peopleCount)
-        :data(data), amount(amount), peopleCount(peopleCount){}
+    Rehearsal(std::time_t data, int amount, int peopleCount, Stage st, Actor a)
+        :data(data), amount(amount), peopleCount(peopleCount), stage(st), leadActor(a){}
     virtual ~Rehearsal(){}
 
     void setdata(const std::time_t& newData){data = newData;}
@@ -40,9 +65,10 @@ private:
     int days;
     double budget;
     int ticketsSold;
+    Playbill playbill;
 public:
-    Tour(std::string city, int days, double budget, int sold)
-        :city(city), days(days), budget(budget), ticketsSold(sold){}
+    Tour(std::string city, int days, double budget, int sold, Playbill pb)
+        :city(city), days(days), budget(budget), ticketsSold(sold), playbill(pb){}
     virtual ~Tour(){}
 
     void start(){std::cout << "Tour in " << city << " started\n";}
@@ -66,23 +92,6 @@ public:
     void printDay(){std::cout << day << " " << month << ": " << eventsCount << " events\n";}
     int getEventsCount() const{return eventsCount;}
     void removeEvent(){eventsCount--; std::cout << "Event removed\n";}
-};
-
-class Playbill{
-private:
-    std::string title;
-    int price;
-    std::string date;
-    int posterSize;
-public:
-    Playbill(std::string title, int price, std::string date)
-        :title(title), price(price), date(date){}
-    virtual ~Playbill(){}
-
-    void announce(){std::cout << "Announcing: " << title << "\n";}
-    void data(){std::cout << "Data: " << date;}
-    int getPrice() const{return price;}
-    void printPoster(){std::cout << "Poster printed: " << title << "\n";}
 };
 
 class Intermission{

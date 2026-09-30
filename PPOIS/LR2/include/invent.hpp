@@ -1,5 +1,7 @@
+#pragma once
 #include <string>
 #include <iostream>
+#include "places.hpp"
 
 class Costume{
 private:
@@ -22,9 +24,10 @@ private:
     std::string theme;
     int inventNumber;
     int cost;
+    Stage stage;
 public:
-    Decoration(int num, int cost)
-        :inventNumber(num), cost(cost){}
+    Decoration(int num, int cost, Stage st)
+        :inventNumber(num), cost(cost), stage(st){}
     virtual ~Decoration(){}
 
     void use(){std::cout << "Decoration " << inventNumber << "usess";}
@@ -125,9 +128,10 @@ class Speaker:public Equipment{
 private:
     int channels;
     int maxVolume;
+    Hall hall;
 public:
-    Speaker(int cost, std::string brand, int ch, int vol)
-        :Equipment(cost, brand), channels(ch), maxVolume(vol){}
+    Speaker(int cost, std::string brand, int ch, int vol, Hall h)
+        :Equipment(cost, brand), channels(ch), maxVolume(vol), hall(h){}
 
     void playSound(){std::cout << "Speaker plays sound\n";}
     void setVolume(int v){maxVolume = v; std::cout << "Volume set to " << v << "\n";}

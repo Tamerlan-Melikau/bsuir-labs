@@ -1,5 +1,7 @@
+#pragma once
 #include <string>
 #include <iostream>
+#include "exceptions.hpp"
 
 class Stage{
 private:
@@ -21,9 +23,10 @@ private:
     int acousticRating;
     int capacity;
     bool hasBalcony;
+    Stage stage;
 public:
-    Hall(int capacity, bool hasBalcony)
-        :capacity(capacity), hasBalcony(hasBalcony){}
+    Hall(int capacity, bool hasBalcony, Stage st)
+        :capacity(capacity), hasBalcony(hasBalcony), stage(st){}
     virtual ~Hall(){};
 
     void dimLights(){std::cout << "Hall lights dimmed\n";}
