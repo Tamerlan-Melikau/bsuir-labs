@@ -69,17 +69,6 @@
 | Award | 6 | 3 | Worker |
 | Warehouse | 4 | 3 | Costume |
 
-## Наследование
-
-| Тип | Пример |
-|---|---|
-| public | Worker → Actor, Instrument → Violin |
-| protected | ReservedStage : protected Stage |
-| private | PremiereInvitation : private Playbill |
-| virtual public | Actor : virtual public Worker, Singer : virtual public Worker |
-| множественное | OperaActor : public Actor, public Singer |
-| ромбовидное | Worker ← (Actor, Singer) ← OperaActor |
-
 ## Разрешение имён через using
 
 | Класс | Что открывает |
