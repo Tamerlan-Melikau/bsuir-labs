@@ -116,6 +116,14 @@ int main(){
     Violin condViolin(5000, "string", 5, "wood", "warm");
     Conductor cond(1, "Ivan", 45, 90000, 20, "Big Orchestra", condViolin);
     cond.conduct();
+
+    Role oRole("Figaro", 200, 90);
+    Costume oCost(10, 5000, 52, "black");
+    Character oChar("Figaro", 30, "barber");
+    OperaActor oa(1, "Ivan", 35, 15, 90000, 180, oRole, oCost, oChar, "baritone", 3);
+    oa.singAria();
+    oa.perform();
+    oa.getName();
     
     return 0;
 }

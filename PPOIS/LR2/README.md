@@ -43,6 +43,7 @@
 | Flutist | 3 | 1 | Flute |
 | Contrabassist | 3 | 1 | Contrabass |
 | Actor | 5 | 4 | Role, Costume, Character |
+| OperaActor | 2 | 2 | Role, Costume, Character (через Actor) |
 | Acrobat | 2 | 1 | — |
 | Cashier | 1 | 1 | — |
 | Cleaner | 1 | 3 | — |
@@ -65,6 +66,14 @@
 | Award | 6 | 3 | Worker |
 | Warehouse | 4 | 3 | Costume |
 
+## Многоуровневое наследование
+
+Цепочка: **Worker → Actor → OperaActor**
+
+- `Worker` — базовый класс всех сотрудников (id, name, age, salary).
+- `Actor` — наследник Worker, добавляет experience, height, role, costume, character.
+- `OperaActor` — наследник Actor, добавляет voiceType, vocalRange.
+
 ## Исключения (12)
 
 - InvalidAgeException
@@ -84,8 +93,8 @@
 
 | Показатель | Значение |
 |---|---|
-| Классов | 60 |
-| Полей | 192 |
-| Поведений | 143 |
+| Классов | 61 |
+| Полей | 194 |
+| Поведений | 145 |
 | Ассоциаций | 30 |
 | Исключений | 12 |

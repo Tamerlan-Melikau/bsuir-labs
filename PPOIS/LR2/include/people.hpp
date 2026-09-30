@@ -250,6 +250,22 @@ public:
     void takeBreak(){std::cout << name << " takes a break\n";}
 };
 
+class OperaActor:public Actor{
+private:
+    std::string voiceType;
+    int vocalRange;
+public:
+    OperaActor(int id, std::string name, int age, int exp, int salary,
+               int height, Role r, Costume c, Character ch,
+               std::string voice, int range)
+        : Actor(id, name, age, exp, salary, height, r, c, ch),
+          voiceType(voice), vocalRange(range){}
+    virtual ~OperaActor(){}
+
+    void singAria(){std::cout << name << " sings aria in " << voiceType << "\n";}
+    void warmUpVoice(){std::cout << name << " warms up voice\n";}
+};
+
 class Acrobat:public Worker{
 private:
     int experince;
