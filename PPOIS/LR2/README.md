@@ -2,7 +2,7 @@
 
 ## Классы
 
-| Класс | Поля | Методы | Ассоциации (связанные классы) |
+| Класс | Поля | Методы | Ассоциации |
 |---|---|---|---|
 | Role | 5 | 5 | — |
 | Character | 4 | 3 | — |
@@ -37,28 +37,31 @@
 | Choreographer | 1 | 2 | — |
 | SoundDesigner | 1 | 2 | — |
 | Conductor | 3 | 2 | Instrument |
-| Violinist | 3 | 1 | Violin |
-| Cellist | 3 | 1 | Cello |
-| Pianist | 3 | 1 | Piano |
-| Flutist | 3 | 1 | Flute |
-| Contrabassist | 3 | 1 | Contrabass |
+| Musician | 2 | 3 | — |
+| Violinist | 1 | 1 | Violin |
+| Cellist | 1 | 1 | Cello |
+| Pianist | 1 | 1 | Piano |
+| Flutist | 1 | 1 | Flute |
+| Contrabassist | 1 | 1 | Contrabass |
 | Actor | 5 | 4 | Role, Costume, Character |
-| OperaActor | 2 | 2 | Role, Costume, Character (через Actor) |
+| Singer | 2 | 2 | Microphone |
+| OperaActor | 1 | 1 | Actor, Singer |
 | Acrobat | 2 | 1 | — |
 | Cashier | 1 | 1 | — |
 | Cleaner | 1 | 3 | — |
 | Doctor | 1 | 3 | — |
-| Singer | 2 | 2 | Microphone |
 | Dancer | 3 | 2 | Costume |
 | MakeupArtist | 1 | 2 | — |
 | Bartender | 1 | 1 | — |
 | Security | 1 | 2 | — |
 | Playbill | 4 | 4 | — |
+| PremiereInvitation | 1 | 1 | Playbill |
 | Performance | 8 | 3 | Director, Hall, Cast |
 | Rehearsal | 6 | 4 | Stage, Actor |
 | Tour | 6 | 4 | Playbill |
 | Schedule | 5 | 4 | — |
 | Intermission | 4 | 3 | — |
+| ReservedStage | 0 | 1 | Stage |
 | Ticket | 4 | 3 | Spectator |
 | Sponsor | 6 | 5 | Contract |
 | Contract | 5 | 4 | Worker |
@@ -66,13 +69,24 @@
 | Award | 6 | 3 | Worker |
 | Warehouse | 4 | 3 | Costume |
 
-## Многоуровневое наследование
+## Наследование
 
-Цепочка: **Worker → Actor → OperaActor**
+| Тип | Пример |
+|---|---|
+| public | Worker → Actor, Instrument → Violin |
+| protected | ReservedStage : protected Stage |
+| private | PremiereInvitation : private Playbill |
+| virtual public | Actor : virtual public Worker, Singer : virtual public Worker |
+| множественное | OperaActor : public Actor, public Singer |
+| ромбовидное | Worker ← (Actor, Singer) ← OperaActor |
 
-- `Worker` — базовый класс всех сотрудников (id, name, age, salary).
-- `Actor` — наследник Worker, добавляет experience, height, role, costume, character.
-- `OperaActor` — наследник Actor, добавляет voiceType, vocalRange.
+## Разрешение имён через using
+
+| Класс | Что открывает |
+|---|---|
+| PremiereInvitation | using Playbill::getPrice; using Playbill::announce; using Playbill::data; |
+| ReservedStage | using Stage::rotate; |
+| OperaActor | using Actor::perform; using Singer::singAria; |
 
 ## Исключения (12)
 
@@ -91,10 +105,12 @@
 
 ## Итоговая статистика
 
-| Показатель | Значение |
-|---|---|
-| Классов | 61 |
-| Полей | 194 |
-| Поведений | 145 |
-| Ассоциаций | 30 |
-| Исключений | 12 |
+| Показатель | Требование | Факт |
+|---|---|---|
+| Классов | ≥ 50 | 64 |
+| Полей | ≥ 150 | ~170 |
+| Поведений | ≥ 100 | ~145 |
+| Ассоциаций | ≥ 30 | 30 |
+| Исключений | ≥ 12 | 12 |
+| Типов наследования | — | 6 |
+| using-директив | — | 6 |

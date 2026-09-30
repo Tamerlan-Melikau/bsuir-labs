@@ -120,10 +120,23 @@ int main(){
     Role oRole("Figaro", 200, 90);
     Costume oCost(10, 5000, 52, "black");
     Character oChar("Figaro", 30, "barber");
-    OperaActor oa(1, "Ivan", 35, 15, 90000, 180, oRole, oCost, oChar, "baritone", 3);
-    oa.singAria();
+    Microphone oMic(200, "Sony", "condenser", true);   // ← новый аргумент
+
+    OperaActor oa(1, "Ivan", 35, 90000, 15, 180, oRole, oCost, oChar,
+                "baritone", oMic, 3);
+    oa.singOperaAria();
     oa.perform();
+    oa.singAria();
     oa.getName();
+
+    PremiereInvitation inv("Hamlet", 500, "2026-01-01", "Ivan");
+    inv.present();
+    std::cout << "Price: " << inv.getPrice() << "\n";
+    inv.data();
+
+    ReservedStage rs(100, true);
+    rs.reserve();
+    rs.rotate();
     
     return 0;
 }

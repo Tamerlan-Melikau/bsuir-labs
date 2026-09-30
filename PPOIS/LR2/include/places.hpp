@@ -9,13 +9,12 @@ private:
     bool hasOrchestraPit;
     std::string floorType;
 public:
-    Stage(int size, bool hasOrchestraPit)
-        :size(size), hasOrchestraPit(hasOrchestraPit){}
-    virtual ~Stage(){}
+    Stage(int size, bool hasOrchestraPit);
+    virtual ~Stage();
 
-    void prepare(){std::cout << "Stage is prepared\n";}
-    void clear(){std::cout << "Stage is cleaned\n";}
-    void rotate(){std::cout << "Stage rotates\n";}
+    void prepare();
+    void clear();
+    void rotate();
 };
 
 class Hall{
@@ -25,16 +24,13 @@ private:
     bool hasBalcony;
     Stage stage;
 public:
-    Hall(int capacity, bool hasBalcony, Stage st)
-        :capacity(capacity), hasBalcony(hasBalcony), stage(st){}
-    virtual ~Hall(){};
+    Hall(int capacity, bool hasBalcony, Stage st);
+    virtual ~Hall();
 
-    void dimLights(){std::cout << "Hall lights dimmed\n";}
-    void fill(int people){
-        if(people > capacity) throw HallOverflowException();
-        std::cout << "Hall is filled with " << people << " people\n";
-    }
-    void empty(){std::cout << "Hall is empty\n";}
+    void dimLights();
+    void fill(int people);
+    void empty();
+
     int getCapacity() const{return capacity;}
 };
 
@@ -45,13 +41,12 @@ private:
     bool hasSofa;
     bool occupied;
 public:
-    DressingRoom(int number, int mirrors, bool hasSofa)
-        :number(number), mirrors(mirrors), hasSofa(hasSofa){}
-    virtual ~DressingRoom(){};
+    DressingRoom(int number, int mirrors, bool hasSofa);
+    virtual ~DressingRoom();
 
-    void occupy(){std::cout << "Dressing room is occupied\n";}
-    void vacate(){std::cout << "Dressing room is vacated\n";}
-    void reserve(){occupied = true; std::cout << "Room reserved\n";}
+    void occupy();
+    void vacate();
+    void reserve();
 };
 
 class Buffet{
@@ -60,12 +55,11 @@ private:
     bool isOpen;
     double revenue;
 public:
-    Buffet(int menuSize, bool isOpen)
-        :menuSize(menuSize), isOpen(isOpen){}
-    virtual ~Buffet(){};
+    Buffet(int menuSize, bool isOpen);
+    virtual ~Buffet();
 
-    void open(){isOpen = true; std::cout << "Buffet is open\n";}
-    void close(){isOpen = false; std::cout << "Buffet is closed\n";}
-    void sell(){if(isOpen) std::cout << "Item sold\n";}
-    void restock(){std::cout << "Buffet restocked\n";}
+    void open();
+    void close();
+    void sell();
+    void restock();
 };
