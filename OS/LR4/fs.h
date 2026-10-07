@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstring>
 
-const int BLOCK_SIZE = 64;
+const int BLOCK_SIZE = 10;
 const int MAX_BLOCKS = 100;
 const int MAX_FILES = 20;
 const int NAME_LEN = 32;
