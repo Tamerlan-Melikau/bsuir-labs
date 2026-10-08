@@ -71,21 +71,3 @@ public:
     void pollAll();
     int getActiveSensors();
 };
-
-class CalibrationData{
-private:
-    TimeStamp* date;
-    double offset;
-    std::string technician;
-public:
-    void apply(Sensor*);
-};
-
-class Reading{
-private:
-    TimeStamp* timestamp;
-    double value;
-    std::string sensorId;
-public:
-    bool isStale();
-};

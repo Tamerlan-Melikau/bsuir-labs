@@ -27,19 +27,6 @@ public:
     bool isReliable();
 };
 
-class HourlyForecast{
-private:
-    Temperature temperature;
-    TimeStamp time;
-    Precipitation precipitation;
-    Wind wind;
-    WeatherCondition condition;
-public:
-    Temperature getFeelsLike();
-    bool isDaytime();
-    bool isPrecipitation();
-};
-
 class TrendAnalyzer{
 private:
     std::vector<Weather> history;
@@ -79,14 +66,4 @@ public:
     void train(std::vector<Weather>);
     Forecast predict(Weather);
     double evaluate();
-};
-
-class ForecastAccuracy{
-private:
-    Weather predicted;
-    Weather actual;
-    double error;
-public:
-    double calculateError();
-    bool isAcceptable();
 };

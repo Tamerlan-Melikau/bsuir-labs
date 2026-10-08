@@ -87,15 +87,6 @@ public:
     bool isClear();
 };
 
-class Visibility{
-private:
-    double distanceKm;
-
-public:
-    bool isPoor();
-    bool isDangerous();
-};
-
 enum class UVRisk{
     LOW,
     MODERATE,
@@ -104,31 +95,11 @@ enum class UVRisk{
     EXTREME
 };
 
-class UVIndex{
-private:
-    double value;
-    UVRisk riskLevel;
-
-public:
-    std::string getRecommendation();
-    bool isHarmful();
-};
-
 enum class Comfort{
     DRY,
     COMFORTABLE,
     HUMID,
     OPPRESSIVE
-};
-
-class DewPoint{
-private:
-    double valueCelsius;
-    Comfort comfortLevel;
-
-public:
-    void calculateFrom(Temperature temperature, Humidity humidity);
-    bool isFogRisk();
 };
 
 enum class WeatherCondition{

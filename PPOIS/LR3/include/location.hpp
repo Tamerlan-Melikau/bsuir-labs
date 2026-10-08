@@ -60,15 +60,6 @@ public:
     Region* findRegion(std::string);
 };
 
-class Timezone{
-private:
-    std::string name;
-    int offsetHours;
-public:
-    int getOffset();
-    bool isDaytime();
-};
-
 class Address{
 private:
     std::string street;
@@ -76,15 +67,5 @@ private:
     int houseNumber;
 public:
     std::string getFullAddress();
-    bool isValid();
-};
-
-class MapTile{
-private:
-    int x;
-    int y;
-    int zoom;
-public:
-    std::string getTileKey();
     bool isValid();
 };
