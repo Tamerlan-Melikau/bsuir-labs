@@ -1,0 +1,8 @@
+*.exe
+*.o
+*.gcno
+*.gcda
+*.gcov
+tests
+main
+.vscode
