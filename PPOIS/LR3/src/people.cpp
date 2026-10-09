@@ -51,3 +51,7 @@ void Master::replaceSensor(Sensor* s){
 
 void Master::requestParts(){
 }
+
+void Supervisor::reviewWork() {
+    showInfo();
+}

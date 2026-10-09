@@ -5,25 +5,25 @@
 #include "sensors.hpp"
 #include "people.hpp"
 
-class Tower{
+class Tower {
 private:
-    std::string id;
+    std::string id = "";
     Location location;
-    double heightMeters;
+    double heightMeters = 0.0;
     std::vector<Sensor*> sensors;
     TimeStamp lastMaintenance;
-    WeatherStation* station;
+    WeatherStation* station = nullptr;
 public:
     bool needsRepair();
     int getSensorCount();
 };
 
-class MaintenanceTask{
+class MaintenanceTask {
 private:
-    Tower* tower;
-    Master* master;
+    Tower* tower = nullptr;
+    Master* master = nullptr;
     TimeStamp scheduledDate;
-    bool completed;
+    bool completed = false;
 public:
     bool isOverdue();
 };

@@ -1,6 +1,7 @@
-#include "location.hpp"
 #define _USE_MATH_DEFINES
 #include <cmath>
+
+#include "location.hpp"
 
 bool GeoCoordinate::isValid() {
     return latitude >= -90.0 && latitude <= 90.0 &&

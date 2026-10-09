@@ -4,70 +4,75 @@
 
 class TimeStamp;
 
-enum class SensorStatus{
+enum class SensorStatus {
     ACTIVE,
     BROKEN,
     CALIBRATING
 };
 
-enum class HygrometerType{
+enum class HygrometerType {
     CAPACITIVE,
     RESISTIVE,
 };
 
-enum class TempUnit{
+enum class TempUnit {
     CELSIUS,
     FAHRENHEIT,
     KELVIN
 };
 
-class Sensor{
+class Sensor {
 private:
-    std::string id;
-    enum SensorStatus status;
-    double accuracy;
-    TimeStamp* lastCalibration;
+    std::string id = "";
+    SensorStatus status = SensorStatus::CALIBRATING;
+    double accuracy = 1.0;
+    TimeStamp* lastCalibration = nullptr;
 public:
     double readValue();
     void calibrate();
     bool isValid();
 };
 
-class Thermometer:public Sensor{
+class Thermometer : public Sensor {
 private:
-    enum TempUnit unit;
+    TempUnit unit = TempUnit::CELSIUS;
 public:
     double readTemperature();
 };
 
-class Barometer:public Sensor{
+class Barometer : public Sensor {
 private:
-    double altitudeCorrection ;
+    double altitudeCorrection = 0.0;
 public:
     double readPressure();
 };
 
-class Anemometer:public Sensor{
+class Anemometer : public Sensor {
 private:
-    double maxSpeed;
+    double maxSpeed = 0.0;
 public:
     double readWindSpeed();
     double readWindDirection();
 };
 
-class Hygrometer:public Sensor{
+class Hygrometer : public Sensor {
 private:
-    enum HygrometerType type;
+    HygrometerType type = HygrometerType::CAPACITIVE;
 public:
     double readHumidity();
 };
 
-class SensorNetwork{
+class SensorNetwork {
 private:
     std::vector<Sensor*> sensors;
-    std::string location;
+    std::string location = "";
 public:
     void addSensor(Sensor*);
     void pollAll();
     int getActiveSensors();
+};
+
+class CalibrationTool : private Sensor {
+public:
+    void runCalibration();
 };

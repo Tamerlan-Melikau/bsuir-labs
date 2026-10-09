@@ -5,32 +5,32 @@
 #include "sensors.hpp"
 #include "location.hpp"
 
-class DataSource{
+class DataSource {
 private:
-    std::string name;
+    std::string name = "";
     TimeStamp lastUpdate;
-    bool active;
+    bool active = false;
 public:
     Weather fetchData();
     bool isAvailable();
 };
 
-class SatelliteSource{
+class SatelliteSource {
 private:
-    int ID;
-    std::string name;
-    double coverageArea;
+    int ID = 0;
+    std::string name = "";
+    double coverageArea = 0.0;
 public:
     void downloadImage();
     Weather processImage();
 };
 
-class WeatherStation{
+class WeatherStation {
 private:
-    std::string adress;
+    std::string adress = "";
     Location location;
     std::vector<Sensor*> sensors;
-    DataSource* source;
+    DataSource* source = nullptr;
 public:
     std::string showAdres();
     Weather readSensors();

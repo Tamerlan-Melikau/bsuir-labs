@@ -2,42 +2,44 @@
 #include "weather.hpp"
 #include <vector>
 
-class DailyForecast{
+class DailyForecast {
 private:
-    Temperature minTemp, maxTemp;
+    Temperature minTemp;
+    Temperature maxTemp;
     TimeStamp date;
     Precipitation precipitation;
     Wind wind;
-    WeatherCondition condition;
+    WeatherCondition condition = WeatherCondition::CLEAR;
 public:
     Temperature getAverageTemp();
     std::string getSummary();
     bool isRainy();
 };
 
-class Forecast{
+class Forecast {
 private:
     Location location;
-    TimeStamp created, validUntil;
+    TimeStamp created;
+    TimeStamp validUntil;
     std::vector<DailyForecast> daily;
-    double confidence;
+    double confidence = 0.0;
 public:
     DailyForecast getDailyForecast(int day);
     double getTemperatureTrend();
     bool isReliable();
 };
 
-class TrendAnalyzer{
+class TrendAnalyzer {
 private:
     std::vector<Weather> history;
-    int period;
+    int period = 0;
 public:
     double calculateTrend();
     double getAverageChange();
     bool isWarming();
 };
 
-class ProbabilityCalculator{
+class ProbabilityCalculator {
 private:
     std::vector<Weather> historicalData;
     Location location;
@@ -47,21 +49,21 @@ public:
     double calculateStormProbability();
 };
 
-class HistoryStorage{
+class HistoryStorage {
 private:
     std::vector<Weather> records;
-    int maxSize;
+    int maxSize = 100;
 public:
     void addRecord(Weather);
     std::vector<Weather> getRecordsForPeriod(TimeStamp, TimeStamp);
     void clearOldRecords();
 };
 
-class ForecastModel{
+class ForecastModel {
 private:
-    std::string name;
-    std::string version;
-    double accuracy;
+    std::string name = "";
+    std::string version = "";
+    double accuracy = 0.0;
 public:
     void train(std::vector<Weather>);
     Forecast predict(Weather);

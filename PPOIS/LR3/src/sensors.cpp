@@ -50,3 +50,7 @@ int SensorNetwork::getActiveSensors(){
     }
     return count;
 }
+
+void CalibrationTool::runCalibration() {
+    calibrate();
+}

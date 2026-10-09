@@ -3,41 +3,41 @@
 #include "location.hpp"
 #include "weather.hpp"
 
-enum class AlertType{
+enum class AlertType {
     STORM, FROST, HEAT, WIND, FLOOD
 };
 
-enum class AlertSeverity{
+enum class AlertSeverity {
     INFO, WARNING, CRITICAL
 };
 
-class Alert{
+class Alert {
 private:
-    std::string id;
-    enum AlertType type;
-    enum AlertSeverity severity;
+    std::string id = "";
+    AlertType type = AlertType::STORM;
+    AlertSeverity severity = AlertSeverity::INFO;
     Location location;
     TimeStamp created;
-    std::string message;
+    std::string message = "";
 public:
     bool isActive();
     std::string getFullText();
 };
 
-class AlertCriteria{
+class AlertCriteria {
 private:
-    double minTemperature;
-    double maxWindSpeed;
-    double minPressure;
-    bool enabled;
+    double minTemperature = 0.0;
+    double maxWindSpeed = 0.0;
+    double minPressure = 0.0;
+    bool enabled = false;
 public:
     bool matches(Weather);
 };
 
-class EmailNotifier{
+class EmailNotifier {
 private:
-    std::string smtpServer;
-    std::string senderEmail;
+    std::string smtpServer = "";
+    std::string senderEmail = "";
 public:
     bool send(std::string, std::string);
     bool validateEmail(std::string);

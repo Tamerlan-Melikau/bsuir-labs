@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-enum class ClimateZone{
+enum class ClimateZone {
     TROPICAL,
     ARID,
     TEMPERATE,
@@ -10,63 +10,61 @@ enum class ClimateZone{
     POLAR
 };
 
-class GeoCoordinate{
+class GeoCoordinate {
 private:
-    double latitude;
-    double longitude;
-
+    double latitude = 0.0;
+    double longitude = 0.0;
 public:
     bool isValid();
     double distanceTo(GeoCoordinate coordinate);
 };
 
-class Location{
+class Location {
 private:
-    std::string name;
+    std::string name = "";
     GeoCoordinate coordinate;
-    std::string timezone;
-
+    std::string timezone = "";
 public:
     std::string getLocalTime();
     std::string getName();
 };
 
-class City{
+class City {
 private:
-    std::string name;
-    int population ;
-    Location location ;
+    std::string name = "";
+    int population = 0;
+    Location location;
 public:
     int getPopulation();
     bool isCapital();
 };
 
-class Region{
+class Region {
 private:
-    std::string name;
-    std::vector<City> cities ;
-    enum ClimateZone climateZone;
+    std::string name = "";
+    std::vector<City> cities;
+    ClimateZone climateZone = ClimateZone::TEMPERATE;
 public:
     void addCity(City);
     double getAverageTemperature();
     std::string getName();
 };
 
-class Country{
+class Country {
 private:
-    std::string name;
-    std::string code;
+    std::string name = "";
+    std::string code = "";
     std::vector<Region> region;
 public:
     int getRegionCount();
     Region* findRegion(std::string);
 };
 
-class Address{
+class Address {
 private:
-    std::string street;
+    std::string street = "";
     City city;
-    int houseNumber;
+    int houseNumber = 0;
 public:
     std::string getFullAddress();
     bool isValid();
