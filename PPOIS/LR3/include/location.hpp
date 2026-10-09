@@ -28,6 +28,7 @@ private:
 
 public:
     std::string getLocalTime();
+    std::string getName();
 };
 
 class City{
@@ -48,6 +49,7 @@ private:
 public:
     void addCity(City);
     double getAverageTemperature();
+    std::string getName();
 };
 
 class Country{

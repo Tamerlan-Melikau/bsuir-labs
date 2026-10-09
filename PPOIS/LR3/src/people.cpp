@@ -5,7 +5,7 @@ std::string Human::showInfo(){
 }
 
 bool User::login(std::string l, std::string p){
-    return login == l && password == p;
+    return loginName == l && password == p;
 }
 
 void User::logout(){
@@ -17,7 +17,7 @@ void User::addFavorite(Location loc){
 
 void User::removeFavorite(Location loc){
     for (auto it = places.begin(); it != places.end(); ++it){
-        if (it->name == loc.name){
+        if (it->getName() == loc.getName()){
             places.erase(it);
             break;
         }

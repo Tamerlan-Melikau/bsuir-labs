@@ -1,4 +1,5 @@
 #include "location.hpp"
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 bool GeoCoordinate::isValid() {
@@ -25,6 +26,10 @@ int City::getPopulation() {
     return population;
 }
 
+std::string Region::getName() {
+    return name;
+}
+
 bool City::isCapital() {
     return population > 1000000;
 }
@@ -43,7 +48,7 @@ int Country::getRegionCount() {
 
 Region* Country::findRegion(std::string n) {
     for (auto& r : region) {
-        if (r.name == n) return &r;
+        if (r.getName() == n) return &r;
     }
     return nullptr;
 }
@@ -54,4 +59,8 @@ std::string Address::getFullAddress() {
 
 bool Address::isValid() {
     return !street.empty() && houseNumber > 0;
+}
+
+std::string Location::getName() {
+    return name;
 }

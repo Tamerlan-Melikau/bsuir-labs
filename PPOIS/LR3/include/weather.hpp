@@ -22,6 +22,7 @@ private:
 public:
     std::string getDirectionName();
     bool isStrong();
+    double getSpeed();
     Temperature calculateWindChill(Temperature temperature);
 };
 

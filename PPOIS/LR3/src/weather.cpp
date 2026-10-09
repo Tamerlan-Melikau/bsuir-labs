@@ -97,7 +97,7 @@ void TimeStamp::addHours(int hours){
 std::string Weather::getSummary(){
     std::stringstream ss;
     ss << "Temp: " << temperature.convertToFahrenheit() << "F, ";
-    ss << "Wind: " << wind.getDirectionName() << " " << wind.speed;
+    ss << "Wind: " << wind.getDirectionName() << " " << wind.getSpeed();
     return ss.str();
 }
 
@@ -126,4 +126,8 @@ bool isPrecipitation(WeatherCondition condition) {
     return condition == WeatherCondition::RAIN ||
            condition == WeatherCondition::SNOW ||
            condition == WeatherCondition::STORM;
+}
+
+double Wind::getSpeed() {
+    return speed;
 }
