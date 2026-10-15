@@ -51,6 +51,29 @@ public:
 };
 
 /**
+ * @brief Лента абстрактной машины.
+ *
+ * Хранит текущую строку (состояние ленты) и умеет её менять,
+ * загружать из потока и выводить.
+ */
+class Tape {
+private:
+    std::string content;
+
+public:
+    Tape();
+    explicit Tape(const std::string& initial);
+
+    void setContent(const std::string& str);
+    const std::string& getContent() const;
+
+    // Загрузка состояния ленты из потока (одна строка)
+    void loadFromStream(std::istream& is);
+
+    friend std::ostream& operator<<(std::ostream& os, const Tape& t);
+};
+
+/**
  * @brief Класс, реализующий нормальный алгорифм Маркова.
  * 
  * Хранит список правил подстановки и умеет применять их к строке.
@@ -58,6 +81,8 @@ public:
 class MarkovAlgorithm {
 private:
     std::vector<Rule> rules;
+    Tape tape;
+    bool logMode = false;
 
 public:
     /**
@@ -90,6 +115,51 @@ public:
      * @return Число правил.
      */
     int ruleCount() const;
+
+        /**
+     * @brief Устанавливает начальное состояние ленты.
+     * @param input Строка, которой будет инициализирована лента.
+     */
+    void setInput(const std::string& input);
+
+    /**
+     * @brief Возвращает текущее содержимое ленты.
+     */
+    const std::string& getTape() const;
+
+    /**
+     * @brief Включает/выключает логирование шагов.
+     */
+    void setLogMode(bool enabled);
+
+    /**
+     * @brief Проверяет, включён ли режим логирования.
+     */
+    bool isLogMode() const;
+
+    /**
+     * @brief Загружает программу и начальное состояние ленты из потока.
+     *
+     * Ожидаемый формат:
+     *   input: <начальная строка>
+     *   <правило 1>
+     *   <правило 2>
+     *   ...
+     */
+    void loadFromStream(std::istream& is);
+
+    /**
+     * @brief Выполняет один шаг алгоритма.
+     * @return true, если правило применилось и работа может продолжаться;
+     *         false, если достигнут конец работы.
+     */
+    bool step();
+
+    /**
+     * @brief Выполняет интерпретацию всей программы, используя внутреннюю ленту.
+     * @return Итоговое содержимое ленты.
+     */
+    std::string apply();
 
     /**
      * @brief Оператор вывода в поток.
