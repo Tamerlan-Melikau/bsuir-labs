@@ -1,0 +1,63 @@
+# Build
+build/
+build-*/
+cmake-build-*/
+out/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+CMakeUserPresets.json
+
+# CTest / coverage
+Testing/
+*.gcno
+*.gcda
+*.gcov
+coverage.info
+coverage_filtered.info
+coverage_html/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+.cache/
+*.user
+*.suo
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.swp
+*~
+
+# Compiled
+*.o
+*.obj
+*.exe
+*.lib
+*.a
+*.dll
+*.pdb
+*.ilk
+*.exp
+
+# vcpkg
+vcpkg_installed/
+
+# Doxygen
+html/
+latex/
+Doxyfile.bak
+
+# Logs / crash dumps
+*.log
+*.dmp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

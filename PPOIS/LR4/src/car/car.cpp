@@ -46,8 +46,8 @@ bool Car::operator==(const Car& other) const {
 
 std::string Car::toString() const {
     std::ostringstream stream;
-    stream << brand << " (" << year << "), пробег: "
-           << std::fixed << std::setprecision(2) << mileage << " км";
+    stream << brand << " (" << year << "), mileage: "
+           << std::fixed << std::setprecision(2) << mileage << " km";
     return stream.str();
 }
 
