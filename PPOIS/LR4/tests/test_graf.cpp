@@ -65,9 +65,9 @@ TEST(GraphTest, RemoveEdge) {
 
 TEST(GraphTest, RemoveVertex) {
     Graph<int> g;
-    g.addVertex(10); // 0
-    g.addVertex(20); // 1
-    g.addVertex(30); // 2
+    g.addVertex(10);
+    g.addVertex(20);
+    g.addVertex(30);
     
     g.addEdge(0, 1);
     g.addEdge(1, 2);
@@ -137,22 +137,6 @@ TEST(GraphIteratorTest, VertexIterator) {
     EXPECT_EQ(result[2], "C");
 }
 
-// TEST(GraphIteratorTest, EdgeIterator) {
-//     Graph<int> g;
-//     g.addVertex(10);
-//     g.addVertex(20);
-//     g.addEdge(0, 1);
-    
-//     int count = 0;
-//     for (auto it = g.beginEdges(); it != g.endEdges(); ++it) {
-//         auto edge = *it;
-//         EXPECT_EQ(edge.first, 0u);
-//         EXPECT_EQ(edge.second, 1u);
-//         count++;
-//     }
-//     EXPECT_EQ(count, 1);
-// }
-
 TEST(GraphIteratorTest, RemoveVertexByIterator) {
     Graph<int> g;
     g.addVertex(10);
@@ -184,7 +168,6 @@ TEST(GraphTest, EdgeDegreeThrows) {
     Graph<int> g;
     g.addVertex(10);
     g.addVertex(20);
-    // Ребра нет, должно быть исключение
     EXPECT_THROW(g.edgeDegree(0, 1), std::out_of_range);
 }
 
