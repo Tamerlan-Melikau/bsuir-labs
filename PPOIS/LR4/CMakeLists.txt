@@ -12,9 +12,16 @@ list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 add_library(lr4_core STATIC ${SOURCES})
 target_include_directories(lr4_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(lr4_core PRIVATE --coverage -g -O0)
+endif()
+
 add_executable(LR4 src/main.cpp)
 target_link_libraries(LR4 PRIVATE lr4_core)
 target_link_options(LR4 PRIVATE -mconsole)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_link_options(LR4 PRIVATE --coverage)
+endif()
 
 enable_testing()
 
@@ -37,8 +44,10 @@ if(TEST_SOURCES)
         GTest::gtest_main
     )
     
-    # target_compile_options(LR4_tests PRIVATE --coverage -g -O0)
-    # target_link_options(LR4_tests PRIVATE --coverage)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(LR4_tests PRIVATE --coverage -g -O0)
+        target_link_options(LR4_tests PRIVATE --coverage)
+    endif()
 
     include(GoogleTest)
     gtest_discover_tests(LR4_tests)

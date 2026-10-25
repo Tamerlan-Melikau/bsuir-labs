@@ -172,10 +172,11 @@ public:
 
     void removeVertex(size_type id) {
         if (!hasVertex(id)) throw std::out_of_range("Vertex does not exist.");
+
         Edge* current = vertices[id].edgesHead;
         while (current != nullptr) {
             Edge* next = current->next;
-            vertices[current->targetId].inDegree--;
+            vertices[current->targetId].inDegree--; 
             delete current;
             current = next;
             edgesCount--;
@@ -188,8 +189,11 @@ public:
             Edge* prev = nullptr;
             while (curr != nullptr) {
                 if (curr->targetId == id) {
-                    if (prev == nullptr) vertices[i].edgesHead = curr->next;
-                    else prev->next = curr->next;
+                    if (prev == nullptr) {
+                        vertices[i].edgesHead = curr->next;
+                    } else {
+                        prev->next = curr->next;
+                    }
                     Edge* toDelete = curr;
                     curr = curr->next;
                     delete toDelete;
@@ -204,10 +208,13 @@ public:
         size_type lastId = vertices.size() - 1;
         if (id != lastId) {
             std::swap(vertices[id], vertices[lastId]);
+            
             for (auto& vertex : vertices) {
                 Edge* curr = vertex.edgesHead;
                 while (curr != nullptr) {
-                    if (curr->targetId == lastId) curr->targetId = id;
+                    if (curr->targetId == lastId) {
+                        curr->targetId = id;
+                    }
                     curr = curr->next;
                 }
             }

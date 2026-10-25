@@ -75,3 +75,24 @@ TEST(CarByMileageTest, Sorting) {
     EXPECT_TRUE(comp(car1, car2));
     EXPECT_FALSE(comp(car2, car1));
 }
+
+TEST(CarByBrandTest, EqualBrands) {
+    Car car1("Audi", 2018, 80000);
+    Car car2("Audi", 2019, 90000);
+    CarByBrand comp;
+    EXPECT_TRUE(comp(car1, car2));
+}
+
+TEST(CarByYearTest, EqualYears) {
+    Car car1("Audi", 2018, 80000);
+    Car car2("BMW", 2018, 90000);
+    CarByYear comp;
+    EXPECT_TRUE(comp(car1, car2));
+}
+
+TEST(CarByMileageTest, EqualMileage) {
+    Car car1("Audi", 2018, 50000);
+    Car car2("BMW", 2018, 50000);
+    CarByMileage comp;
+    EXPECT_TRUE(comp(car1, car2));
+}
