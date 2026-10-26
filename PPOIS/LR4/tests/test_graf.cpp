@@ -137,6 +137,72 @@ TEST(GraphIteratorTest, VertexIterator) {
     EXPECT_EQ(result[2], "C");
 }
 
+TEST(GraphIteratorTest, ReverseVertexIterator) {
+    Graph<std::string> g;
+    g.addVertex("A");
+    g.addVertex("B");
+    g.addVertex("C");
+
+    std::vector<std::string> result;
+    for (auto it = g.rbeginVertices(); it != g.rendVertices(); --it) {
+        result.push_back(*it);
+    }
+
+    ASSERT_EQ(result.size(), 3u);
+    EXPECT_EQ(result[0], "C");
+    EXPECT_EQ(result[1], "B");
+    EXPECT_EQ(result[2], "A");
+}
+
+TEST(GraphIteratorTest, EdgeIterator) {
+    Graph<int> g;
+    g.addVertex(10);
+    g.addVertex(20);
+    g.addVertex(30);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(2, 0);
+
+    std::vector<std::pair<size_t, size_t>> result;
+    for (auto it = g.beginEdges(); it != g.endEdges(); ++it) {
+        result.push_back(*it);
+    }
+
+    ASSERT_EQ(result.size(), 3u);
+    EXPECT_EQ(result[0].first, 0u);
+    EXPECT_EQ(result[0].second, 2u);
+    EXPECT_EQ(result[1].first, 0u);
+    EXPECT_EQ(result[1].second, 1u);
+    EXPECT_EQ(result[2].first, 2u);
+    EXPECT_EQ(result[2].second, 0u);
+}
+
+TEST(GraphIteratorTest, ReverseEdgeIterator) {
+    Graph<int> g;
+    g.addVertex(10);
+    g.addVertex(20);
+    g.addVertex(30);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(2, 0);
+
+    std::vector<std::pair<size_t, size_t>> result;
+    auto first = g.beginEdges();
+    auto it = g.endEdges();
+    while (it != first) {
+        --it;
+        result.push_back(*it);
+    }
+
+    ASSERT_EQ(result.size(), 3u);
+    EXPECT_EQ(result[0].first, 2u);
+    EXPECT_EQ(result[0].second, 0u);
+    EXPECT_EQ(result[1].first, 0u);
+    EXPECT_EQ(result[1].second, 1u);
+    EXPECT_EQ(result[2].first, 0u);
+    EXPECT_EQ(result[2].second, 2u);
+}
+
 TEST(GraphIteratorTest, RemoveVertexByIterator) {
     Graph<int> g;
     g.addVertex(10);
@@ -181,4 +247,40 @@ TEST(GraphTest, RemoveEdgeThrows) {
     g.addVertex(10);
     g.addVertex(20);
     EXPECT_THROW(g.removeEdge(0, 1), std::out_of_range);
+}
+
+TEST(GraphTest, AddDuplicateEdgeThrows) {
+    Graph<int> g;
+    g.addVertex(10);
+    g.addVertex(20);
+    g.addEdge(0, 1);
+    
+    EXPECT_THROW(g.addEdge(0, 1), std::invalid_argument);
+    
+    EXPECT_EQ(g.edgeCount(), 1u);
+}
+
+TEST(GraphTest, EdgeDegreeForLoop) {
+    Graph<int> g;
+    g.addVertex(10);
+    g.addEdge(0, 0);
+    EXPECT_EQ(g.edgeDegree(0, 0), 1u);
+}
+
+TEST(GraphIteratorTest, AdjacentVertexIterator) {
+    Graph<int> g;
+    g.addVertex(10);
+    g.addVertex(20);
+    g.addVertex(30);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+
+    std::vector<int> result;
+    for (auto it = g.beginAdjacentVertices(0); it != g.endAdjacentVertices(0); ++it) {
+        result.push_back(*it);
+    }
+
+    ASSERT_EQ(result.size(), 2u);
+    EXPECT_EQ(result[0], 30);
+    EXPECT_EQ(result[1], 20);
 }

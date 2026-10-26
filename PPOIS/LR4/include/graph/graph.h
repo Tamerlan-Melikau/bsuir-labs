@@ -138,13 +138,24 @@ public:
 
     size_type edgeDegree(size_type fromId, size_type toId) const {
         if (!hasEdge(fromId, toId)) throw std::out_of_range("Edge does not exist.");
+        if (fromId == toId) return 1;
         return 2;
     }
 
-    void addVertex(const T& value) { vertices.emplace_back(value); }
+    void addVertex(const T& value) { 
+        for (const auto& v : vertices) {
+            if (v.data == value) {
+                throw std::invalid_argument("Vertex with this name already exists.");
+            }
+        }
+        vertices.emplace_back(value); 
+    }
 
     void addEdge(size_type fromId, size_type toId) {
-        if (!hasVertex(fromId) || !hasVertex(toId)) throw std::out_of_range("Vertices do not exist.");
+        if (!hasVertex(fromId) || !hasVertex(toId)) throw std::out_of_range("Vertices do not exist");
+        if (hasEdge(fromId, toId)) {
+            throw std::invalid_argument("Edge already exists");
+        }
         Edge* newEdge = new Edge(toId, vertices[fromId].edgesHead);
         vertices[fromId].edgesHead = newEdge;
         edgesCount++;
@@ -249,6 +260,36 @@ public:
         size_type getId() const { return currentId; }
     };
 
+    class ConstVertexIterator {
+    private:
+        const Graph* graph;
+        size_type currentId;
+
+    public:
+        using iterator_category = std::bidirectional_iterator_tag;
+        using value_type = T;
+        using difference_type = std::ptrdiff_t;
+        using pointer = const T*;
+        using reference = const T&;
+
+        ConstVertexIterator(const Graph* g, size_type id) : graph(g), currentId(id) {}
+
+        reference operator*() const { return graph->vertices[currentId].data; }
+        pointer operator->() const { return &(graph->vertices[currentId].data); }
+
+        ConstVertexIterator& operator++() { ++currentId; return *this; }
+        ConstVertexIterator operator++(int) { ConstVertexIterator tmp = *this; ++currentId; return tmp; }
+        ConstVertexIterator& operator--() { --currentId; return *this; }
+        ConstVertexIterator operator--(int) { ConstVertexIterator tmp = *this; --currentId; return tmp; }
+
+        bool operator==(const ConstVertexIterator& other) const { 
+            return currentId == other.currentId && graph == other.graph; 
+        }
+        bool operator!=(const ConstVertexIterator& other) const { return !(*this == other); }
+
+        size_type getId() const { return currentId; }
+    };
+
     class EdgeIterator {
     private:
         Graph* graph;
@@ -271,19 +312,91 @@ public:
                 ++fromId;
                 currentEdge = graph->vertices[fromId].edgesHead;
             }
+            if (!currentEdge) {
+                fromId = graph->vertices.size();
+            }
             return *this;
         }
         EdgeIterator operator++(int) { EdgeIterator tmp = *this; ++(*this); return tmp; }
-        
+
         EdgeIterator& operator--() {
-            if (fromId > 0 || currentEdge != graph->vertices[fromId].edgesHead) {
-                 throw std::logic_error("Reverse edge iteration not fully implemented");
+            if (currentEdge == nullptr) {
+                size_type prevId = graph->vertices.size();
+                while (prevId > 0) {
+                    --prevId;
+                    if (graph->vertices[prevId].edgesHead != nullptr) {
+                        fromId = prevId;
+                        currentEdge = graph->vertices[prevId].edgesHead;
+                        while (currentEdge->next != nullptr) currentEdge = currentEdge->next;
+                        return *this;
+                    }
+                }
+                throw std::logic_error("Cannot decrement empty edge iterator");
             }
-            return *this;
+
+            if (currentEdge != graph->vertices[fromId].edgesHead) {
+                Edge* prev = graph->vertices[fromId].edgesHead;
+                while (prev->next != currentEdge) prev = prev->next;
+                currentEdge = prev;
+                return *this;
+            }
+
+            size_type prevId = fromId;
+            while (prevId > 0) {
+                --prevId;
+                if (graph->vertices[prevId].edgesHead != nullptr) {
+                    fromId = prevId;
+                    currentEdge = graph->vertices[prevId].edgesHead;
+                    while (currentEdge->next != nullptr) currentEdge = currentEdge->next;
+                    return *this;
+                }
+            }
+            throw std::logic_error("Cannot decrement begin edge iterator");
         }
 
         bool operator==(const EdgeIterator& other) const { return currentEdge == other.currentEdge && fromId == other.fromId; }
         bool operator!=(const EdgeIterator& other) const { return !(*this == other); }
+    };
+
+    class ConstEdgeIterator {
+    private:
+        const Graph* graph;
+        size_type fromId;
+        const Edge* currentEdge;
+
+    public:
+        using iterator_category = std::bidirectional_iterator_tag;
+        using value_type = std::pair<size_type, size_type>;
+        using difference_type = std::ptrdiff_t;
+        using pointer = const value_type*;
+        using reference = value_type;
+
+        ConstEdgeIterator(const Graph* g, size_type fId, const Edge* edge) 
+            : graph(g), fromId(fId), currentEdge(edge) {}
+
+        value_type operator*() const { return {fromId, currentEdge->targetId}; }
+
+        ConstEdgeIterator& operator++() {
+            if (currentEdge) currentEdge = currentEdge->next;
+            while (!currentEdge && fromId + 1 < graph->vertices.size()) {
+                ++fromId;
+                currentEdge = graph->vertices[fromId].edgesHead;
+            }
+            if (!currentEdge) {
+                fromId = graph->vertices.size();
+            }
+            return *this;
+        }
+        ConstEdgeIterator operator++(int) { ConstEdgeIterator tmp = *this; ++(*this); return tmp; }
+        
+        ConstEdgeIterator& operator--() {
+            throw std::logic_error("Reverse edge iteration not fully implemented");
+        }
+
+        bool operator==(const ConstEdgeIterator& other) const { 
+            return currentEdge == other.currentEdge && fromId == other.fromId; 
+        }
+        bool operator!=(const ConstEdgeIterator& other) const { return !(*this == other); }
     };
 
     class IncidentEdgeIterator {
@@ -291,6 +404,8 @@ public:
         Graph* graph;
         size_type vertexId;
         Edge* currentEdge;
+        Edge* prevEdge;
+
     public:
         using iterator_category = std::bidirectional_iterator_tag;
         using value_type = size_type;
@@ -298,21 +413,112 @@ public:
         using pointer = size_type*;
         using reference = size_type;
 
-        IncidentEdgeIterator(Graph* g, size_type vId, Edge* edge) : graph(g), vertexId(vId), currentEdge(edge) {}
+        IncidentEdgeIterator(Graph* g, size_type vId, Edge* edge, Edge* prev = nullptr) 
+            : graph(g), vertexId(vId), currentEdge(edge), prevEdge(prev) {}
+
+        reference operator*() const { 
+            return currentEdge->targetId; 
+        }
+
+        // Шаг вперед
+        IncidentEdgeIterator& operator++() { 
+            if (currentEdge) {
+                prevEdge = currentEdge;
+                currentEdge = currentEdge->next;
+            }
+            return *this;
+        }
+        IncidentEdgeIterator operator++(int) { 
+            IncidentEdgeIterator tmp = *this; 
+            ++(*this); 
+            return tmp; 
+        }
+
+        IncidentEdgeIterator& operator--() { 
+            if (prevEdge) {
+                currentEdge = prevEdge;
+                prevEdge = nullptr;
+                Edge* curr = graph->vertices[vertexId].edgesHead;
+                while (curr != nullptr && curr->next != currentEdge) {
+                    prevEdge = curr;
+                    curr = curr->next;
+                }
+            }
+            return *this;
+        }
+        IncidentEdgeIterator operator--(int) { 
+            IncidentEdgeIterator tmp = *this; 
+            --(*this); 
+            return tmp; 
+        }
+
+        bool operator==(const IncidentEdgeIterator& other) const { 
+            return currentEdge == other.currentEdge && vertexId == other.vertexId; 
+        }
+        bool operator!=(const IncidentEdgeIterator& other) const { 
+            return !(*this == other); 
+        }
+    };
+
+    class ConstIncidentEdgeIterator {
+    private:
+        const Graph* graph;
+        size_type vertexId;
+        const Edge* currentEdge;
+        const Edge* prevEdge;
+
+    public:
+        using iterator_category = std::bidirectional_iterator_tag;
+        using value_type = size_type;
+        using difference_type = std::ptrdiff_t;
+        using pointer = const size_type*;
+        using reference = size_type;
+
+        ConstIncidentEdgeIterator(const Graph* g, size_type vId, const Edge* edge, const Edge* prev = nullptr) 
+            : graph(g), vertexId(vId), currentEdge(edge), prevEdge(prev) {}
 
         reference operator*() const { return currentEdge->targetId; }
-        IncidentEdgeIterator& operator++() { if (currentEdge) currentEdge = currentEdge->next; return *this; }
-        IncidentEdgeIterator operator++(int) { IncidentEdgeIterator tmp = *this; ++(*this); return tmp; }
-        IncidentEdgeIterator& operator--() { throw std::logic_error("Reverse not implemented"); }
 
-        bool operator==(const IncidentEdgeIterator& other) const { return currentEdge == other.currentEdge; }
-        bool operator!=(const IncidentEdgeIterator& other) const { return !(*this == other); }
+        ConstIncidentEdgeIterator& operator++() { 
+            if (currentEdge) {
+                prevEdge = currentEdge;
+                currentEdge = currentEdge->next;
+            }
+            return *this;
+        }
+        ConstIncidentEdgeIterator operator++(int) { 
+            ConstIncidentEdgeIterator tmp = *this; ++(*this); return tmp; 
+        }
+
+        ConstIncidentEdgeIterator& operator--() { 
+            if (prevEdge) {
+                currentEdge = prevEdge;
+                prevEdge = nullptr;
+                const Edge* curr = graph->vertices[vertexId].edgesHead;
+                while (curr != nullptr && curr->next != currentEdge) {
+                    prevEdge = curr;
+                    curr = curr->next;
+                }
+            }
+            return *this;
+        }
+        ConstIncidentEdgeIterator operator--(int) { 
+            ConstIncidentEdgeIterator tmp = *this; --(*this); return tmp; 
+        }
+
+        bool operator==(const ConstIncidentEdgeIterator& other) const { 
+            return currentEdge == other.currentEdge && vertexId == other.vertexId; 
+        }
+        bool operator!=(const ConstIncidentEdgeIterator& other) const { 
+            return !(*this == other); 
+        }
     };
 
     class AdjacentVertexIterator {
     private:
         Graph* graph;
         IncidentEdgeIterator edgeIt;
+
     public:
         using iterator_category = std::bidirectional_iterator_tag;
         using value_type = T;
@@ -320,22 +526,85 @@ public:
         using pointer = T*;
         using reference = T&;
 
-        AdjacentVertexIterator(Graph* g, size_type vId, Edge* edge) : graph(g), edgeIt(g, vId, edge) {}
+        AdjacentVertexIterator(Graph* g, size_type vId, Edge* edge, Edge* prev = nullptr) 
+            : graph(g), edgeIt(g, vId, edge, prev) {}
+
+        reference operator*() const { 
+            return graph->vertices[*edgeIt].data; 
+        }
+
+        AdjacentVertexIterator& operator++() { 
+            ++edgeIt; 
+            return *this; 
+        }
+        AdjacentVertexIterator operator++(int) { 
+            AdjacentVertexIterator tmp = *this; 
+            ++(*this); 
+            return tmp; 
+        }
+
+        AdjacentVertexIterator& operator--() { 
+            --edgeIt; 
+            return *this; 
+        }
+        AdjacentVertexIterator operator--(int) { 
+            AdjacentVertexIterator tmp = *this; 
+            --(*this); 
+            return tmp; 
+        }
+
+        bool operator==(const AdjacentVertexIterator& other) const { 
+            return edgeIt == other.edgeIt; 
+        }
+        bool operator!=(const AdjacentVertexIterator& other) const { 
+            return !(*this == other); 
+        }
+    };
+
+    class ConstAdjacentVertexIterator {
+    private:
+        const Graph* graph;
+        ConstIncidentEdgeIterator edgeIt;
+
+    public:
+        using iterator_category = std::bidirectional_iterator_tag;
+        using value_type = T;
+        using difference_type = std::ptrdiff_t;
+        using pointer = const T*;
+        using reference = const T&;
+
+        ConstAdjacentVertexIterator(const Graph* g, size_type vId, const Edge* edge, const Edge* prev = nullptr) 
+            : graph(g), edgeIt(g, vId, edge, prev) {}
 
         reference operator*() const { return graph->vertices[*edgeIt].data; }
-        AdjacentVertexIterator& operator++() { ++edgeIt; return *this; }
-        AdjacentVertexIterator operator++(int) { AdjacentVertexIterator tmp = *this; ++(*this); return tmp; }
 
-        bool operator==(const AdjacentVertexIterator& other) const { return edgeIt == other.edgeIt; }
-        bool operator!=(const AdjacentVertexIterator& other) const { return !(*this == other); }
+        ConstAdjacentVertexIterator& operator++() { ++edgeIt; return *this; }
+        ConstAdjacentVertexIterator operator++(int) { ConstAdjacentVertexIterator tmp = *this; ++(*this); return tmp; }
+        ConstAdjacentVertexIterator& operator--() { --edgeIt; return *this; }
+        ConstAdjacentVertexIterator operator--(int) { ConstAdjacentVertexIterator tmp = *this; --(*this); return tmp; }
+
+        bool operator==(const ConstAdjacentVertexIterator& other) const { return edgeIt == other.edgeIt; }
+        bool operator!=(const ConstAdjacentVertexIterator& other) const { return !(*this == other); }
     };
 
     VertexIterator beginVertices() { return VertexIterator(this, 0); }
     VertexIterator endVertices() { return VertexIterator(this, vertices.size()); }
-    VertexIterator rbeginVertices() { return VertexIterator(this, vertices.size() - 1); }
-    VertexIterator rendVertices() { return VertexIterator(this, -1); }
-    VertexIterator cbeginVertices() const { return VertexIterator(const_cast<Graph*>(this), 0); }
-    VertexIterator cendVertices() const { return VertexIterator(const_cast<Graph*>(this), vertices.size()); }
+    VertexIterator rbeginVertices() {
+        return VertexIterator(this, vertices.empty() ? static_cast<size_type>(-1) : vertices.size() - 1);
+    }
+    VertexIterator rendVertices() { return VertexIterator(this, static_cast<size_type>(-1)); }
+    ConstVertexIterator cbeginVertices() const { return ConstVertexIterator(this, 0); }
+    ConstVertexIterator cendVertices() const { return ConstVertexIterator(this, vertices.size()); }
+
+    ConstEdgeIterator cbeginEdges() const {
+        size_type start = 0;
+        while (start < vertices.size() && vertices[start].edgesHead == nullptr) start++;
+        if (start == vertices.size()) return cendEdges();
+        return ConstEdgeIterator(this, start, vertices[start].edgesHead);
+    }
+    ConstEdgeIterator cendEdges() const { 
+        return ConstEdgeIterator(this, vertices.size(), nullptr); 
+    }
 
     EdgeIterator beginEdges() {
         size_type start = 0;
@@ -347,18 +616,60 @@ public:
 
     IncidentEdgeIterator beginIncidentEdges(size_type vertexId) {
         if (!hasVertex(vertexId)) throw std::out_of_range("Vertex does not exist.");
-        return IncidentEdgeIterator(this, vertexId, vertices[vertexId].edgesHead);
+        return IncidentEdgeIterator(this, vertexId, vertices[vertexId].edgesHead, nullptr);
     }
     IncidentEdgeIterator endIncidentEdges(size_type vertexId) {
-        return IncidentEdgeIterator(this, vertexId, nullptr);
+        return IncidentEdgeIterator(this, vertexId, nullptr, nullptr);
+    }
+    
+    IncidentEdgeIterator rbeginIncidentEdges(size_type vertexId) {
+        if (!hasVertex(vertexId)) throw std::out_of_range("Vertex does not exist.");
+        Edge* curr = vertices[vertexId].edgesHead;
+        Edge* prev = nullptr;
+        if (curr == nullptr) return endIncidentEdges(vertexId);
+        while (curr->next != nullptr) {
+            prev = curr;
+            curr = curr->next;
+        }
+        return IncidentEdgeIterator(this, vertexId, curr, prev);
     }
 
     AdjacentVertexIterator beginAdjacentVertices(size_type vertexId) {
         if (!hasVertex(vertexId)) throw std::out_of_range("Vertex does not exist.");
-        return AdjacentVertexIterator(this, vertexId, vertices[vertexId].edgesHead);
+        return AdjacentVertexIterator(this, vertexId, vertices[vertexId].edgesHead, nullptr);
     }
     AdjacentVertexIterator endAdjacentVertices(size_type vertexId) {
-        return AdjacentVertexIterator(this, vertexId, nullptr);
+        return AdjacentVertexIterator(this, vertexId, nullptr, nullptr);
+    }
+
+    EdgeIterator rbeginEdges() {
+        if (vertices.empty()) return endEdges();
+        
+        size_type lastId = vertices.size() - 1;
+        while (lastId > 0 && vertices[lastId].edgesHead == nullptr) {
+            --lastId;
+        }
+        
+        if (vertices[lastId].edgesHead == nullptr) return endEdges();
+        
+        Edge* curr = vertices[lastId].edgesHead;
+        while (curr->next != nullptr) {
+            curr = curr->next;
+        }
+        return EdgeIterator(this, lastId, curr);
+    }
+
+    AdjacentVertexIterator rbeginAdjacentVertices(size_type vertexId) {
+        if (!hasVertex(vertexId)) throw std::out_of_range("Vertex does not exist.");
+        Edge* curr = vertices[vertexId].edgesHead;
+        if (curr == nullptr) return endAdjacentVertices(vertexId);
+        
+        Edge* prev = nullptr;
+        while (curr->next != nullptr) {
+            prev = curr;
+            curr = curr->next;
+        }
+        return AdjacentVertexIterator(this, vertexId, curr, prev);
     }
 
     void removeVertex(VertexIterator it) { removeVertex(it.getId()); }
@@ -370,16 +681,13 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Graph& graph) {
         os << "Graph with " << graph.vertexCount() << " vertices and " << graph.edgeCount() << " edges:\n";
         os << "Vertices: ";
-        for (size_t i = 0; i < graph.vertices.size(); ++i) {
-            os << graph.vertices[i].data << " ";
-        }
+        std::for_each(graph.cbeginVertices(), graph.cendVertices(), [&os](const T& val) {
+            os << val << " ";
+        });
         os << "\nEdges: ";
-        for (size_t i = 0; i < graph.vertices.size(); ++i) {
-            auto* edge = graph.vertices[i].edgesHead;
-            while (edge != nullptr) {
-                os << "(" << graph.vertices[i].data << " -> " << graph.vertices[edge->targetId].data << ") ";
-                edge = edge->next;
-            }
+        for (auto it = graph.cbeginEdges(); it != graph.cendEdges(); ++it) {
+            auto edge = *it;
+            os << "(" << graph.vertices[edge.first].data << " -> " << graph.vertices[edge.second].data << ") ";
         }
         os << "\n";
         return os;
